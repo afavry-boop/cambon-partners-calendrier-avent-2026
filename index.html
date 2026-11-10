@@ -4,608 +4,931 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Calendrier de l’Avent – Cambon Partners</title>
+  <title>Calendrier de l’Avent Cambon Partners</title>
 
-  <!-- Polices : Times New Roman (titre + chiffres, comme l'an dernier), Parisienne (sous-titre),
-       Playball (phrase du bas + nom du jeu), Cormorant Garamond (textes du modal) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Playball&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <!-- Police script pour le sous-titre -->
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      /* ====== COULEURS (à ajuster ici) ====== */
-      --vert:#0C2F22;        /* fond vert sapin */
-      --vert-fonce:#08231A;  /* fond du modal */
-      --or:#A98B45;          /* cases dorées */
-      --or-clair:#C9AC66;    /* survol des cases */
-      --creme:#F6EDD5;       /* textes */
-      --rouge:#C2412E;       /* erreur */
-      --vert-ok:#8FC79A;     /* bonne réponse */
-
-      /* ====== POLICES ====== */
-      --titre:"Times New Roman", Times, serif;   /* titre + chiffres (comme 2025) */
-      --sous-titre:"Parisienne", cursive;        /* sous-titre (comme 2025) */
-      --script-gras:"Playball", cursive;
-      --texte:"Cormorant Garamond", Georgia, serif;
+      /* Palette & tokens — NOUVELLES COULEURS 2026 */
+      --bg:#0C2F22;          /* Fond vert sapin */
+      --card:#A98B45;        /* Fond doré des cartes */
+      --modal:#08231A;       /* Fond du modal (vert plus foncé) */
+      --ink:#F6EDD5;         /* Texte principal (crème) */
+      --muted:#C9B98F;       /* Texte secondaire */
+      --accent:#C9AC66;      /* Doré clair (survol, confettis) */
+      --accent-2:#8FC79A;    /* Vert succès (lisible sur fond foncé) */
+      --danger:#E8907F;      /* Rouge erreur (lisible sur fond foncé) */
+      --creme:#F6EDD5;       /* Remplace l’ancien rouge des titres */
+      --shadow:0 8px 18px rgba(0,0,0,.25); /* Ombre douce */
     }
 
-    *{ box-sizing:border-box; }
     html, body{
       margin:0;
-      min-height:100%;
-      background:var(--vert);
-      color:var(--creme);
-      font-family:var(--texte);
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"Times New Roman", serif;
       -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
     body{
-      min-height:100vh;
       position:relative;
+      min-height:100vh;
       overflow-x:hidden;
     }
+    *{ box-sizing:border-box; }
 
-    /* ====== DÉCORS (images PNG détourées) ====== */
+    /* Décors (nouveau) */
     .deco{
       position:absolute;
       pointer-events:none;
       user-select:none;
       z-index:0;
     }
-    .deco-sapin-hg{ top:0; left:0; width:clamp(110px, 17vw, 240px); }
-    .deco-sapin-hd{ top:0; right:0; width:clamp(110px, 16vw, 230px); }
-    .deco-sapin-bd{ bottom:0; right:0; width:clamp(140px, 22vw, 300px); }
-    .deco-pere-noel{ top:42%; left:0; width:clamp(50px, 6vw, 80px); }
-    .deco-bonhomme{ top:64%; right:0; width:clamp(34px, 3.5vw, 50px); }
-    .deco-boule{
-      top:0; right:clamp(8px, 1vw, 20px);
-      width:clamp(120px, 17vw, 230px);
-      transform-origin:50% 0;
-      animation:balance 6s ease-in-out infinite;
-    }
-    @keyframes balance{
-      0%,100%{ transform:rotate(-2deg); }
-      50%{ transform:rotate(2deg); }
-    }
+    .deco-sapin-hg{ top:0; left:0; width:240px; }
+    .deco-sapin-hd{ top:0; right:0; width:230px; }
+    .deco-sapin-bd{ bottom:0; right:0; width:300px; }
+    .deco-boule{ top:0; right:20px; width:230px; }
+    .deco-pere-noel{ top:42%; left:0; width:80px; }
+    .deco-bonhomme{ top:64%; right:0; width:50px; }
 
-    /* ====== CONTENU ====== */
-    .page{
+    .wrap{
       position:relative;
       z-index:1;
       max-width:1100px;
-      margin:0 auto;
-      padding:64px 20px 90px;
-      text-align:center;
+      margin:64px auto 0;
+      padding:0 20px;
     }
-    /* Titre : même police, taille et graisse que l'an dernier */
-    h1{
-      font-family:var(--titre);
+
+    /* Header */
+    .title{
+      text-align:center;
       font-size:54px;
       font-weight:500;
+      color:var(--creme);
       line-height:1.25;
-      margin:0;
     }
-    /* Sous-titre : même police et taille que l'an dernier */
-    .sous-titre{
-      font-family:var(--sous-titre);
+    .subtitle{
+      text-align:center;
+      font-family:"Parisienne", cursive;
       font-size:40px;
-      margin:6px 0 28px;
+      color:var(--creme);
+      margin-top:6px;
     }
 
-    /* ====== GRILLE ====== */
-    .grille{
-      display:grid;
-      grid-template-columns:repeat(6, 1fr);
-      gap:clamp(8px, 1.2vw, 12px);
-      max-width:520px;
-      margin:0 auto;
-    }
-    .case{
+    /* Phrase du bas (nouveau) */
+    .phrase-bas{
       position:relative;
-      aspect-ratio:1.13 / 1;
-      background:var(--or);
+      z-index:1;
+      max-width:1100px;
+      margin:40px auto 0;
+      padding:0 20px 40px;
+      font-family:"Parisienne", cursive;
+      font-size:28px;
+      color:var(--creme);
+    }
+
+    /* Toolbar */
+    .toolbar{
+      position:relative;
+      z-index:1;
+      display:flex;
+      gap:12px;
+      justify-content:flex-end;
+      max-width:1100px;
+      margin:28px auto 24px;
+      padding:0 20px;
+    }
+    .pill{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.15);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .btn{
+      background:var(--card);
+      color:var(--modal);
+      border-radius:6px;
       border:none;
+      padding:8px 14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:background .2s ease;
+    }
+    .btn:hover{ transform:translateY(-1px); background:var(--accent); }
+
+    /* Grille */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(6, minmax(120px, 1fr));
+      gap:18px;
+      margin-top:28px;
+    }
+
+    .door{
+      position:relative;
+      background:var(--card);
+      border:none;
+      height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:200;
+      font-size:48px;
+      letter-spacing:.5px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:all .2s ease-in-out;
       color:var(--creme);
       cursor:pointer;
-      overflow:hidden;
-      transition:background .2s ease, transform .2s ease;
+      font-family:"Times New Roman";
     }
-    /* Chiffre : même police, taille et position que l'an dernier */
-    .case .num{
+    .door:hover:not(.opened){
+      box-shadow:0 10px 18px rgba(0,0,0,.3);
+      transform:translateY(-2px);
+    }
+    .door.locked{
+      cursor:not-allowed;
+      filter:none;
+      opacity:1;
+    }
+    .door.opened{
+      background:var(--bg);
+      box-shadow:inset 0 0 0 1px var(--card);
+      border:none;
+    }
+    .door .num{
       position:absolute;
       top:8px; left:10px;
-      font-family:var(--titre);
+      color:var(--creme);
       font-size:32px;
       font-weight:500;
-      line-height:1;
+      z-index:2;
     }
-    .case:hover:not(.verrouillee){ background:var(--or-clair); transform:translateY(-2px); }
-    .case:focus-visible{ outline:2px solid var(--creme); outline-offset:3px; }
-    .case.verrouillee{ cursor:not-allowed; }
-    /* Case déjà jouée : dorure en contour */
-    .case.ouverte{
-      background:transparent;
-      box-shadow:inset 0 0 0 1.5px var(--or);
-      color:var(--or);
-    }
-    .case.ouverte:hover{ background:rgba(169,139,69,.15); }
-
-    .message-attente{
-      min-height:24px;
-      margin-top:18px;
-      font-style:italic;
-      font-size:17px;
-      opacity:.9;
-    }
-
-    .pied{
+    .door.opened .num{ color:var(--card); }
+    .door .icon{
       position:absolute;
-      left:20px; bottom:22px;
-      z-index:1;
-      font-family:var(--script-gras);
-      font-size:clamp(14px, 1.6vw, 17px);
-      margin:0;
-    }
-
-    /* ====== BARRE MODE TEST (visible avec ?mode=test) ====== */
-    .barre-test{
-      display:none;
-      position:fixed; left:12px; top:12px; z-index:5;
-      gap:8px;
-    }
-    .barre-test.visible{ display:flex; }
-    .barre-test button{
-      background:var(--vert-fonce);
-      color:var(--creme);
-      border:1px solid var(--or);
-      padding:6px 12px;
-      font-family:var(--texte);
-      font-size:14px;
-      cursor:pointer;
-    }
-
-    /* ====== MODAL ====== */
-    .fond-modal{
-      position:fixed; inset:0;
-      background:rgba(4,20,14,.6);
-      backdrop-filter:blur(5px);
-      display:none;
-      align-items:flex-start;
-      justify-content:center;
-      padding:8vh 16px 16px;
-      z-index:10;
-      overflow-y:auto;
-    }
-    .fond-modal.visible{ display:flex; }
-    .modal{
-      width:min(640px, 100%);
-      background:var(--vert-fonce);
-      border:1.5px solid var(--or);
-      padding:22px 32px 30px;
-      position:relative;
-      text-align:left;
-    }
-    .modal.secousse{ animation:secousse .35s ease; }
-    @keyframes secousse{
-      0%,100%{ transform:translateX(0); }
-      25%{ transform:translateX(-8px); }
-      50%{ transform:translateX(8px); }
-      75%{ transform:translateX(-4px); }
-    }
-    .fermer{
-      position:absolute; top:10px; right:14px;
-      background:none; border:none;
-      color:var(--creme);
-      font-size:30px; line-height:1;
-      cursor:pointer;
-    }
-    .modal-jour{
-      font-family:var(--titre);
-      font-size:64px;
-      font-weight:500;
-      letter-spacing:.5px;
-      color:var(--or);
-      line-height:1;
-    }
-    .modal-jeu{
-      font-family:var(--script-gras);
-      font-size:26px;
-      margin:4px 0 6px;
-    }
-    .modal-consigne{
-      font-size:19px;
-      line-height:1.5;
-      margin:0 0 16px;
-    }
-
-    .media{ margin:0 0 18px; }
-    .media img, .media video, .media iframe{
-      display:block;
-      width:100%;
-      max-height:380px;
+      bottom:8px;
+      right:8px;
+      width:50px;
+      height:50px;
       object-fit:contain;
-      background:#000;
-      border:0;
+      opacity:0.6;
+      transition:opacity .2s ease;
     }
-    .media iframe{ height:340px; }
-    .media audio{ width:100%; }
+    .door:hover:not(.opened) .icon{ opacity:0.8; }
+    .door.opened .icon{ opacity:0.25; }
 
-    .ligne-reponse{ display:flex; gap:10px; }
+    /* Modal */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background:none;
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:flex-start; justify-content:center;
+      padding-top:12vh; z-index:50;
+    }
+    .modal{
+      width:min(760px, calc(100vw - 32px));
+      background:var(--modal);
+      border:1px solid var(--card);
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,.35);
+      overflow:hidden;
+      color:var(--ink);
+      transform:translateY(0);
+      transition:transform .25s ease;
+      font-family:"Times New Roman", serif;
+    }
+    .modal.shake{ animation:shake .3s ease; }
+    @keyframes shake{
+      0%{transform:translateX(0)} 20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)} 60%{transform:translateX(-5px)}
+      80%{transform:translateX(5px)} 100%{transform:translateX(0)}
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:20px 33px;
+    }
+    .modal-title{
+      font-size:64px; font-weight:500; color:var(--card);
+      letter-spacing:.5px;
+    }
+    .modal-close{
+      background:transparent; border:none; font-size:24px; color:var(--creme);
+      cursor:pointer;
+    }
+    .modal-body{ padding:10px 33px 20px; }
+
+    /* Nom du mini-jeu (nouveau) */
+    .jeu{
+      font-family:"Parisienne", cursive;
+      font-size:30px;
+      color:var(--creme);
+      margin-bottom:4px;
+    }
+
+    .anecdote{
+      background:none;
+      border:none;
+      padding:8px 0 12px;
+      font-size:18px;
+      line-height:1.6;
+      color:var(--creme);
+    }
+
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:18px;
+    }
+    .hint{
+      font-family:"Parisienne";
+      font-size:20px;
+      color:var(--creme);
+      margin-bottom:4px;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
     select{
       flex:1;
-      padding:10px 12px;
-      background:var(--vert);
+      padding:8px 10px;
+      border-radius:6px;
+      border:1px solid var(--card);
+      background:var(--bg);
       color:var(--creme);
-      border:1px solid var(--or);
-      font-family:var(--texte);
-      font-size:17px;
-    }
-    .btn-valider{
-      background:var(--or);
-      color:var(--vert-fonce);
-      border:none;
-      padding:10px 22px;
-      font-family:var(--texte);
-      font-weight:600;
-      font-size:17px;
-      cursor:pointer;
-    }
-    .btn-valider:hover{ background:var(--or-clair); }
-    select:focus-visible, .btn-valider:focus-visible, .fermer:focus-visible, .barre-test button:focus-visible{
-      outline:2px solid var(--creme); outline-offset:2px;
+      font-family:"Times New Roman", serif;
+      font-size:15px;
+      outline:none;
     }
 
-    .resultat{ margin-top:14px; font-size:19px; line-height:1.5; }
-    .resultat.ok{ color:var(--vert-ok); }
-    .resultat.ko{ color:#E8907F; }
-    .revelation{ display:none; margin-top:14px; }
-    .revelation.visible{ display:block; }
-    .revelation p{ font-size:18px; line-height:1.55; margin:0 0 12px; }
+    .result{ margin-top:10px; font-weight:700; }
+    .ok{ color:var(--accent-2); }
+    .ko{ color:var(--danger); }
+
+    .media{
+      display:none; margin-top:14px;
+    }
+    .media iframe, .media video, .media img{
+      width:100%;
+      height:380px;
+      border:0;
+      border-radius:12px;
+      background:#000;
+      animation:popIn .6s ease;
+    }
+    .media video, .media img{
+      object-fit:contain;
+      display:block;
+    }
+    .media audio{ width:100%; }
+    @keyframes popIn{
+      from{ opacity:0; transform:scale(.95); }
+      to{ opacity:1; transform:scale(1); }
+    }
+
+    .footer{ margin-top:12px; display:flex; justify-content:flex-end; }
+
+    /* Petit style pour le message gagnant */
+    .win-msg{ margin-top:8px; }
+    .watch-tip{ margin-top:4px; font-style:italic; opacity:.85; }
 
     /* Confettis */
-    #confettis{ position:fixed; inset:0; pointer-events:none; z-index:20; }
+    .confetti{ position:fixed; pointer-events:none; inset:0; overflow:hidden; z-index:60; }
 
-    /* ====== RESPONSIVE ====== */
-    /* Tailles du titre, sous-titre et chiffres reprises du code 2025 */
-    @media (max-width: 1024px){
-      h1{ font-size:42px; }
-      .sous-titre{ font-size:32px; }
-      .case .num{ font-size:28px; top:6px; left:8px; }
-      .modal-jour{ font-size:56px; }
-    }
-    @media (max-width: 768px){
-      h1{ font-size:32px; }
-      .sous-titre{ font-size:24px; margin-top:4px; }
-      .case .num{ font-size:24px; top:4px; left:6px; }
-      .modal-jour{ font-size:48px; }
-    }
-    @media (max-width: 480px){
-      h1{ font-size:26px; }
-      .sous-titre{ font-size:20px; }
-      .case .num{ font-size:20px; }
-      .modal-jour{ font-size:40px; }
+    /* RESPONSIVE - TABLETTE */
+    @media (max-width: 1024px) {
+      .wrap{
+        max-width: 100%;
+        margin: 40px auto 0;
+        padding: 0 16px;
+      }
+
+      .title{
+        font-size: 42px;
+      }
+
+      .subtitle{
+        font-size: 32px;
+      }
+
+      .toolbar{
+        margin: 20px auto 20px;
+        padding: 0 16px;
+      }
+
+      .grid{
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .door{
+        height: 110px;
+      }
+
+      .door .num{
+        font-size: 28px;
+        top: 6px;
+        left: 8px;
+      }
+
+      .door .icon{
+        width: 45px;
+        height: 45px;
+      }
+
+      .modal{
+        width: min(680px, calc(100vw - 32px));
+      }
+
+      .modal-head{
+        padding: 18px 28px;
+      }
+
+      .modal-title{
+        font-size: 56px;
+      }
+
+      .modal-body{
+        padding: 8px 28px 18px;
+      }
+
+      .anecdote{
+        font-size: 17px;
+      }
+
+      .media iframe, .media video, .media img{
+        height: 320px;
+      }
+
+      /* Décors réduits */
+      .deco-sapin-hg, .deco-sapin-hd{ width:160px; }
+      .deco-boule{ width:150px; }
+      .deco-sapin-bd{ width:200px; }
+      .deco-pere-noel{ width:60px; }
+      .deco-bonhomme{ width:40px; }
     }
 
-    @media (max-width: 700px){
-      .page{ padding-top:110px; }
-      .grille{ grid-template-columns:repeat(4, 1fr); }
-      .deco-pere-noel, .deco-bonhomme{ display:none; }
-      .deco-boule{ width:96px; }
-      .modal{ padding:20px 20px 24px; }
-      .ligne-reponse{ flex-direction:column; }
+    /* RESPONSIVE - MOBILE */
+    @media (max-width: 768px) {
+      .wrap{
+        margin: 24px auto 0;
+        padding: 0 12px;
+      }
+
+      .title{
+        font-size: 32px;
+      }
+
+      .subtitle{
+        font-size: 24px;
+        margin-top: 4px;
+      }
+
+      .toolbar{
+        flex-direction: column;
+        gap: 8px;
+        margin: 16px auto 16px;
+        padding: 0 12px;
+        align-items: stretch;
+      }
+
+      .pill, .btn{
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .grid{
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .door{
+        height: 100px;
+        font-size: 40px;
+      }
+
+      .door .num{
+        font-size: 24px;
+        top: 4px;
+        left: 6px;
+      }
+
+      .door .icon{
+        width: 38px;
+        height: 38px;
+        bottom: 6px;
+        right: 6px;
+      }
+
+      .modal-backdrop{
+        padding-top: 5vh;
+        align-items: flex-start;
+      }
+
+      .modal{
+        width: calc(100vw - 24px);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-head{
+        padding: 16px 20px;
+      }
+
+      .modal-title{
+        font-size: 48px;
+      }
+
+      .modal-close{
+        font-size: 28px;
+      }
+
+      .modal-body{
+        padding: 6px 20px 16px;
+      }
+
+      .anecdote{
+        font-size: 16px;
+        padding: 6px 0 10px;
+      }
+
+      .form{
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .hint{
+        font-size: 18px;
+      }
+
+      .row{
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      select, .btn{
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+
+      .result{
+        margin-top: 8px;
+        font-size: 15px;
+      }
+
+      .media{
+        margin-top: 12px;
+      }
+
+      .media iframe, .media video, .media img{
+        height: 300px;
+      }
+
+      /* Décors : on garde seulement les branches du haut, plus petites */
+      .deco-sapin-hg, .deco-sapin-hd{ width:110px; }
+      .deco-boule, .deco-pere-noel, .deco-bonhomme, .deco-sapin-bd{ display:none; }
+      .wrap{ padding-top:70px; }
+      .phrase-bas{ font-size:22px; padding:0 12px 30px; }
     }
-    @media (max-width: 420px){
-      .grille{ grid-template-columns:repeat(3, 1fr); }
-    }
-    @media (prefers-reduced-motion: reduce){
-      .deco-boule{ animation:none; }
-      .case, .modal{ transition:none; animation:none !important; }
+
+    /* RESPONSIVE - TRÈS PETITS MOBILES */
+    @media (max-width: 480px) {
+      .title{
+        font-size: 26px;
+      }
+
+      .subtitle{
+        font-size: 20px;
+      }
+
+      .grid{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .door{
+        height: 90px;
+      }
+
+      .door .num{
+        font-size: 20px;
+      }
+
+      .door .icon{
+        width: 32px;
+        height: 32px;
+      }
+
+      .modal-title{
+        font-size: 40px;
+      }
+
+      .anecdote{
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- DÉCORS : mets tes PNG dans un dossier "images" à côté de index.html.
+  <!-- Décors (nouveau) : PNG détourés dans un dossier "images" à côté de index.html.
        Si une image manque, elle se masque toute seule. -->
-  <img class="deco deco-sapin-hg"   src="images/sapin-haut-gauche.png" alt="" onerror="this.remove()">
-  <img class="deco deco-sapin-hd"   src="images/sapin-haut-droite.png" alt="" onerror="this.remove()">
-  <img class="deco deco-boule"      src="images/boule-cambon.png"      alt="" onerror="this.remove()">
-  <img class="deco deco-pere-noel"  src="images/pere-noel.png"         alt="" onerror="this.remove()">
-  <img class="deco deco-bonhomme"   src="images/bonhomme-neige.png"    alt="" onerror="this.remove()">
-  <img class="deco deco-sapin-bd"   src="images/sapin-bas-droite.png"  alt="" onerror="this.remove()">
+  <img class="deco deco-sapin-hg"  src="images/sapin-haut-gauche.png" alt="" onerror="this.remove()">
+  <img class="deco deco-sapin-hd"  src="images/sapin-haut-droite.png" alt="" onerror="this.remove()">
+  <img class="deco deco-boule"     src="images/boule-cambon.png"      alt="" onerror="this.remove()">
+  <img class="deco deco-pere-noel" src="images/pere-noel.png"         alt="" onerror="this.remove()">
+  <img class="deco deco-bonhomme"  src="images/bonhomme-neige.png"    alt="" onerror="this.remove()">
+  <img class="deco deco-sapin-bd"  src="images/sapin-bas-droite.png"  alt="" onerror="this.remove()">
 
-  <div class="barre-test" id="barreTest">
-    <button id="btnReset">Réinitialiser</button>
+  <div class="wrap">
+    <div class="title">Calendrier de l’avent – Cambon Partners</div>
+    <div class="subtitle">Quel mini jeu à découvrir aujourd’hui ?</div>
+
+    <div class="grid" id="grid"></div>
   </div>
 
-  <main class="page">
-    <h1>Calendrier de l’avent – Cambon Partners</h1>
-    <p class="sous-titre">Quel mini jeu à découvrir aujourd’hui ?</p>
+  <div class="toolbar">
+    <span class="pill" id="today-pill"></span>
+    <button class="btn" id="toggle-dev">Mode test</button>
+    <button class="btn" id="reset">Réinitialiser</button>
+  </div>
 
-    <div class="grille" id="grille"></div>
-    <p class="message-attente" id="messageAttente" aria-live="polite"></p>
-  </main>
+  <div class="phrase-bas">Que l’aventure de Noël commence…</div>
 
-  <p class="pied">Que l’aventure de Noël commence…</p>
-
-  <!-- MODAL -->
-  <div class="fond-modal" id="fondModal">
-    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalJeu">
-      <button class="fermer" id="fermer" aria-label="Fermer">×</button>
-      <div class="modal-jour" id="modalJour">1</div>
-      <div class="modal-jeu" id="modalJeu"></div>
-      <p class="modal-consigne" id="modalConsigne"></p>
-      <div class="media" id="media"></div>
-
-      <div class="ligne-reponse">
-        <select id="choix" aria-label="Ta réponse"></select>
-        <button class="btn-valider" id="valider">Valider</button>
+  <!-- Modal -->
+  <div class="modal-backdrop" id="backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modalBox">
+      <div class="modal-head">
+        <div class="modal-title" id="modal-title">01</div>
+        <button class="modal-close" id="close">×</button>
       </div>
 
-      <div class="resultat" id="resultat" aria-live="polite"></div>
-      <div class="revelation" id="revelation"></div>
+      <div class="modal-body">
+        <div class="jeu" id="jeu"></div>
+        <div class="anecdote" id="anecdote"></div>
+
+        <!-- Média du mini-jeu, affiché AVANT de répondre (nouveau) -->
+        <div class="media" id="mediaJeu"></div>
+
+        <div class="form">
+          <label class="hint">Ta réponse</label>
+          <div class="row">
+            <select id="answerSelect"></select>
+            <button class="btn" id="submit">Valider</button>
+          </div>
+
+          <div class="result" id="result"></div>
+
+          <!-- Zone média de révélation, affichée APRÈS une bonne réponse -->
+          <div class="media" id="media"></div>
+        </div>
+
+        <div class="footer"></div>
+      </div>
     </div>
   </div>
 
-  <canvas id="confettis"></canvas>
+  <canvas class="confetti" id="confetti"></canvas>
 
   <script>
-    /*****************************************************************
-     * 1. L’ÉQUIPE (liste proposée pour les jeux « qui est-ce ? »)
-     *****************************************************************/
-    const EQUIPE = [
-      "Adèle","Alain","Alexandra","Alexandre A.","Alexandre C.","Alexandre H.","Amélie","Anna","Annabelle","Anselme","Aubert",
-      "Baptiste","Briac","Camille","Carine","Chadi","David","Elena","Florian","Gaiané","Gabriel","Grégoire","Guillaume E.",
-      "Guillaume T.","Jeremy","Jonathan","Jordan","Julien","Juliette","Laurent A.","Laurent N.","Lily","Louis","Luca","Marius",
-      "Mathieu","Maxime","Maxime P.","Michael","Min","Morgann","Mostapha","Nathalie","Nicolas O.","Nicolas P.","Nicolas R.",
-      "Nicolas SP.","Paul","Pauline","Pierre","Raphaël","Robin","Romain D","Romain P.","Simon","Télio","Thomas A.","Thomas B.",
-      "Thomas K.","Victor","Yahia","Younes","Yvette"
+    /***************
+     * CONFIG TEAM *
+     ***************/
+    const TEAM = [
+     "Adèle","Alain","Alexandra","Alexandre A.","Alexandre C.","Alexandre H.","Amélie","Anna","Annabelle","Anselme","Aubert",
+     "Baptiste","Briac","Camille","Carine","Chadi","David","Elena","Florian","Gaiané","Gabriel","Grégoire","Guillaume E.",
+     "Guillaume T.","Jeremy","Jonathan","Jordan","Julien","Juliette","Laurent A.","Laurent N.", "Lily","Louis","Luca","Marius","Mathieu","Maxime",
+     "Maxime P.","Michael","Min","Morgann","Mostapha","Nathalie","Nicolas O.","Nicolas P.","Nicolas R.","Nicolas SP.","Paul","Pauline",
+     "Pierre","Raphaël","Robin","Romain D","Romain P.","Simon","Télio","Thomas A.","Thomas B.","Thomas K.","Victor","Yahia","Younes","Yvette"
     ];
 
+    /*********************************************
+     * ICÔNES DES CASES (comme l'an dernier)     *
+     * Vide = pas d'icône, comme sur la maquette *
+     * Ex. : 1: "img-calendrier 2/etoile-2.png"  *
+     *********************************************/
+    const DAY_IMAGES = {};
+
+    /*****************************************************
+     * ORDRE DES CASES                                   *
+     * Ordre fixe de la maquette. Pour revenir à l'ordre *
+     * aléatoire de l'an dernier : const ORDRE = null;   *
+     *****************************************************/
+    const ORDRE = [10,2,7,5,17,13, 16,14,4,9,23,19, 3,21,12,1,20,24, 8,11,18,6,22,15];
+
     /*****************************************************************
-     * 2. LES 24 JOURS — un mini-jeu par case
-     *
-     *  jeu        : nom du mini-jeu (affiché en titre)
-     *  consigne   : la question posée
-     *  media      : ce qu’on montre AVANT de répondre
-     *               { type:"image" | "audio" | "video" | "youtube", src:"chemin ou lien" }
-     *  choix      : "equipe" → liste des collègues
-     *               ou une liste perso → ["Lisbonne","Bali","Tokyo"]
-     *  reponse    : la bonne réponse (écrite exactement comme dans la liste)
-     *  revelation : ce qu’on montre APRÈS une bonne réponse (facultatif)
-     *               { texte:"…", media:{ type:"…", src:"…" } }
+     * 24 JOURS — même modèle que l'an dernier, avec 3 champs en plus :
+     *   jeu     : nom du mini-jeu (nouveau)
+     *   anecdote: la consigne / question (comme avant)
+     *   media   : ce qu'on montre AVANT de répondre (nouveau, facultatif)
+     *             { type:"image" | "audio" | "video" | "youtube", src:"…" }
+     *   choix   : liste de réponses perso (nouveau, facultatif)
+     *             sans "choix", c'est la liste TEAM qui s'affiche
+     *   answer  : la bonne réponse (comme avant)
+     *   video   : vidéo de révélation après une bonne réponse (comme avant)
      *****************************************************************/
-    const JOURS = [
+    const DAYS = [
       {
-        jour: 1,
+        day: 1,
         jeu: "Qui est le bébé ?",
-        consigne: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
+        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
         media: { type:"image", src:"jeux/jour-1-bebe.jpg" },
-        choix: "equipe",
-        reponse: "Annabelle",
-        revelation: { texte:"Et voilà à quoi ressemble ce bébé aujourd’hui !", media:{ type:"image", src:"jeux/jour-1-adulte.jpg" } }
+        answer: "Annabelle",
+        video: ""
       },
       {
-        jour: 2,
+        day: 2,
         jeu: "La chanson préférée",
-        consigne: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
         media: { type:"audio", src:"jeux/jour-2-chanson.mp3" },
-        choix: "equipe",
-        reponse: "Anselme",
-        revelation: { texte:"C’était sa chanson fétiche ! Demande-lui pourquoi à la machine à café." }
+        answer: "Anselme",
+        video: ""
       },
       {
-        jour: 3,
+        day: 3,
         jeu: "GeoGuessr",
-        consigne: "Cette photo de vacances a été prise par un collègue. Où était-il ?",
+        anecdote: "Cette photo de vacances a été prise par un collègue. Où était-il ?",
         media: { type:"image", src:"jeux/jour-3-vacances.jpg" },
         choix: ["Lisbonne","Bali","Kyoto","Marrakech","Reykjavik"],
-        reponse: "Kyoto",
-        revelation: { texte:"Bien vu, c’était Kyoto !" }
+        answer: "Kyoto",
+        video: ""
       }
       // Ajoute les jours suivants sur le même modèle…
     ];
 
-    // Ordre d’affichage des cases (identique à la maquette)
-    const ORDRE = [10,2,7,5,17,13, 16,14,4,9,23,19, 3,21,12,1,20,24, 8,11,18,6,22,15];
+    /**********************
+     * ÉTAT & PERSISTENCE *
+     **********************/
+    const STORAGE_KEY = "advent-quiz-2026";
+    const state = { dev:false, score:0, opened:{} };
 
-    /*****************************************************************
-     * 3. ÉTAT & SAUVEGARDE (reste dans le navigateur de chaque joueur)
-     *****************************************************************/
-    const CLE = "avent-cambon-2026";
-    const etat = { test:false, ouverts:{} };
-
-    function charger(){
-      try{ Object.assign(etat, JSON.parse(localStorage.getItem(CLE)) || {}); }catch(e){}
+    function load(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw) Object.assign(state, JSON.parse(raw));
+      }catch(_){}
     }
-    function sauver(){
-      try{ localStorage.setItem(CLE, JSON.stringify(etat)); }catch(e){}
+    function save(){
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(_){}
     }
 
-    /*****************************************************************
-     * 4. OUTILS
-     *****************************************************************/
-    const $ = id => document.getElementById(id);
-    const aujourdhui = new Date();
-    function estDebloque(jour){
-      return etat.test || (aujourdhui.getMonth() === 11 && jour <= aujourdhui.getDate());
+    /**************
+     * UTILITAIRE *
+     **************/
+    const today = new Date();
+    const month = today.getMonth()+1;
+    const date = today.getDate();
+    function isUnlocked(day){ return state.dev || (month===12 && day<=date); }
+    function $(id){ return document.getElementById(id); }
+    function el(tag, attrs={}, children=[]){
+      const node = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v])=>{
+        if(k==="class") node.className=v;
+        else if(k==="text") node.textContent=v;
+        else node.setAttribute(k,v);
+      });
+      [].concat(children).forEach(c=> node.appendChild(typeof c==="string" ? document.createTextNode(c) : c));
+      return node;
     }
-    function normaliser(s){
-      return (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase();
+    function norm(s){ return (s||"").toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase(); }
+    function check(day, guess){
+      const d = DAYS.find(x=>x.day===day);
+      const target = norm(d.answer);
+      const aliases = (d.aliases||[]).map(norm);
+      const g = norm(guess);
+      return g===target || aliases.includes(g);
     }
-    function htmlMedia(m){
+    // Encode les chemins locaux (espaces, accents)
+    function encodePath(p){
+      return p.startsWith("http") ? p : p.split('/').map(part => encodeURIComponent(part)).join('/');
+    }
+    // Génère le HTML d'un média (nouveau)
+    function mediaHTML(m){
       if(!m || !m.src) return "";
-      const src = m.src.startsWith("http") ? m.src : m.src.split("/").map(encodeURIComponent).join("/");
-      switch(m.type){
-        case "image":   return `<img src="${src}" alt="">`;
-        case "audio":   return `<audio controls src="${src}"></audio>`;
-        case "video":   return `<video controls playsinline src="${src}"></video>`;
-        case "youtube": return `<iframe src="${m.src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        default: return "";
-      }
+      const src = encodePath(m.src);
+      if(m.type==="image")   return `<img src="${src}" alt="">`;
+      if(m.type==="audio")   return `<audio controls src="${src}"></audio>`;
+      if(m.type==="video")   return `<video controls playsinline src="${src}"></video>`;
+      if(m.type==="youtube") return `<iframe src="${m.src}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+      return "";
     }
 
-    /*****************************************************************
-     * 5. GRILLE
-     *****************************************************************/
-    function afficherGrille(){
-      const grille = $("grille");
-      grille.innerHTML = "";
-      ORDRE.forEach(jour => {
-        const btn = document.createElement("button");
-        btn.className = "case";
-        if(!estDebloque(jour)) btn.classList.add("verrouillee");
-        if(etat.ouverts[jour]?.correct) btn.classList.add("ouverte");
-        const num = document.createElement("span");
-        num.className = "num";
-        num.textContent = String(jour).padStart(2, "0");   // 1 → 01, comme l'an dernier
-        btn.appendChild(num);
-        btn.setAttribute("aria-label", `Jour ${jour}`);
-        btn.addEventListener("click", () => cliquerCase(jour));
-        grille.appendChild(btn);
+    /************
+     *  RENDER  *
+     ************/
+    const grid = $("grid");
+
+    function renderGrid(){
+      grid.innerHTML = "";
+      // Ordre fixe (maquette) ou aléatoire si ORDRE = null
+      const days = ORDRE
+        ? ORDRE.map(n => DAYS.find(x=>x.day===n) || { day:n })
+        : [...DAYS].sort(()=> Math.random() - 0.5);
+
+      days.forEach(d=>{
+        const opened = !!(state.opened[d.day] && state.opened[d.day].correct);
+        const door = el("button", {
+          class:`door ${!isUnlocked(d.day)?'locked':''} ${opened?'opened':''}`,
+          "data-day":d.day
+        });
+        door.appendChild(el("span", {class:"badge", text: ""}));
+        const dayLabel = String(d.day).padStart(2,'0');
+        door.appendChild(el("div", {class:"num", text:dayLabel}));
+
+        if(DAY_IMAGES[d.day]){
+          door.appendChild(el("img", {class:"icon", src: DAY_IMAGES[d.day], alt:""}));
+        }
+
+        door.addEventListener("click", ()=>{
+          if(!isUnlocked(d.day)) return;
+          if(!DAYS.find(x=>x.day===d.day)) return; // jour pas encore rempli
+          openModal(d.day);
+        });
+        grid.appendChild(door);
       });
     }
 
-    function cliquerCase(jour){
-      const msg = $("messageAttente");
-      if(!estDebloque(jour)){
-        msg.textContent = `Cette case s’ouvre le ${jour} décembre.`;
+    /************
+     *  MODAL   *
+     ************/
+    const backdrop = $("backdrop"),
+          modalBox = $("modalBox"),
+          modalTitle = $("modal-title"),
+          jeu = $("jeu"),
+          anecdote = $("anecdote"),
+          mediaJeu = $("mediaJeu"),
+          answerSelect = $("answerSelect"),
+          submitBtn = $("submit"),
+          result = $("result"),
+          mediaBox = $("media");
+
+    let currentDay = 1;
+
+    function buildOptions(d){
+      answerSelect.innerHTML = "";
+      answerSelect.appendChild(el("option",{value:"", text:"— Sélectionne une réponse —"}));
+      const liste = d.choix || TEAM;
+      liste.forEach(name => answerSelect.appendChild(el("option",{value:name, text:name})));
+    }
+
+    function openModal(day){
+      currentDay = day;
+      const d = DAYS.find(x=>x.day===day);
+      modalTitle.textContent = String(day).padStart(2,'0');
+      jeu.textContent = d.jeu || "";
+      anecdote.textContent = d.anecdote;
+      buildOptions(d);
+
+      // Média du jeu (avant réponse)
+      mediaJeu.innerHTML = mediaHTML(d.media);
+      mediaJeu.style.display = d.media ? "block" : "none";
+
+      const saved = state.opened[day] || {};
+      answerSelect.value = saved.answer || "";
+      result.textContent = "";
+      result.className = "result";
+      mediaBox.style.display = "none";
+      mediaBox.innerHTML = "";
+
+      backdrop.style.display = "flex";
+    }
+    function closeModal(){
+      backdrop.style.display = "none";
+      mediaJeu.innerHTML = "";   // coupe le son / la vidéo
+      mediaBox.innerHTML = "";
+    }
+    $("close").addEventListener("click", closeModal);
+    backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeModal(); });
+
+    submitBtn.addEventListener("click", ()=>{
+      const guess = answerSelect.value;
+      if(!guess){
+        result.textContent = "Choisis une réponse avant de valider";
+        result.className = "result ko";
         return;
       }
-      const donnees = JOURS.find(j => j.jour === jour);
-      if(!donnees){
-        msg.textContent = `Le mini-jeu du ${jour} décembre arrive bientôt.`;
-        return;
-      }
-      msg.textContent = "";
-      ouvrirModal(donnees);
-    }
 
-    /*****************************************************************
-     * 6. MODAL & MINI-JEU
-     *****************************************************************/
-    let jourCourant = null;
+      const good = check(currentDay, guess);
+      state.opened[currentDay] = { answer: guess, correct: good };
 
-    function ouvrirModal(d){
-      jourCourant = d;
-      $("modalJour").textContent = String(d.jour).padStart(2, "0");
-      $("modalJeu").textContent = d.jeu;
-      $("modalConsigne").textContent = d.consigne;
-      $("media").innerHTML = htmlMedia(d.media);
+      if (good) {
+        const d = DAYS.find(x => x.day === currentDay);
 
-      const liste = d.choix === "equipe" ? EQUIPE : d.choix;
-      const select = $("choix");
-      select.innerHTML = `<option value="">Choisis une réponse</option>` +
-        liste.map(n => `<option value="${n}">${n}</option>`).join("");
+        result.className = "result ok";
+        result.innerHTML = `
+          <div class="win-msg">
+            <strong>Bien joué&nbsp;! 🎉</strong> C’était <strong>${d.answer}</strong>.
+            ${d.video ? '<div class="watch-tip">🎬 Regarde la vidéo ci-dessous&nbsp;!</div>' : ''}
+          </div>
+        `;
 
-      const deja = etat.ouverts[d.jour];
-      select.value = deja?.reponse || "";
-      $("resultat").textContent = "";
-      $("resultat").className = "resultat";
-      $("revelation").className = "revelation";
-      $("revelation").innerHTML = "";
-      if(deja?.correct) montrerRevelation(d);
+        // Affichage de la vidéo de révélation si configurée
+        if (d.video) {
+          if (d.video.trim().toLowerCase().endsWith('.mp4')) {
+            mediaBox.innerHTML = `<video controls playsinline src="${encodePath(d.video)}"></video>`;
+          } else {
+            mediaBox.innerHTML = `<iframe src="${d.video}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+          }
+          mediaBox.style.display = 'block';
+          mediaBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
-      $("fondModal").classList.add("visible");
-      select.focus();
-    }
+        celebrate();
 
-    function fermerModal(){
-      $("fondModal").classList.remove("visible");
-      $("media").innerHTML = "";        // coupe le son / la vidéo
-      $("revelation").innerHTML = "";
-    }
-
-    function montrerRevelation(d){
-      $("resultat").className = "resultat ok";
-      $("resultat").innerHTML = `Bien joué ! La réponse était <strong>${d.reponse}</strong>.`;
-      if(d.revelation){
-        $("revelation").innerHTML =
-          (d.revelation.texte ? `<p>${d.revelation.texte}</p>` : "") + htmlMedia(d.revelation.media);
-        $("revelation").classList.add("visible");
-      }
-    }
-
-    $("valider").addEventListener("click", () => {
-      const d = jourCourant;
-      const choix = $("choix").value;
-      if(!choix){
-        $("resultat").className = "resultat ko";
-        $("resultat").textContent = "Choisis une réponse avant de valider.";
-        return;
-      }
-      const bon = normaliser(choix) === normaliser(d.reponse);
-      etat.ouverts[d.jour] = { reponse: choix, correct: bon };
-      sauver();
-
-      if(bon){
-        montrerRevelation(d);
-        confettis();
       } else {
-        $("resultat").className = "resultat ko";
-        $("resultat").textContent = "Raté ! Tente une autre réponse.";
-        const m = $("modal");
-        m.classList.remove("secousse"); void m.offsetWidth; m.classList.add("secousse");
+        result.className = "result ko";
+        result.textContent = "Loupé…! Essaie une autre réponse 😉";
+        modalBox.classList.add("shake");
+        setTimeout(()=> modalBox.classList.remove("shake"), 400);
       }
-      afficherGrille();
+
+      state.score = Object.values(state.opened).filter(x=>x.correct).length;
+      save();
+      renderGrid();
     });
 
-    $("fermer").addEventListener("click", fermerModal);
-    $("fondModal").addEventListener("click", e => { if(e.target.id === "fondModal") fermerModal(); });
-    document.addEventListener("keydown", e => { if(e.key === "Escape") fermerModal(); });
-
-    /*****************************************************************
-     * 7. CONFETTIS (or, crème, vert)
-     *****************************************************************/
-    const canvas = $("confettis"), ctx = canvas.getContext("2d");
-    let particules = [];
-    function redimensionner(){ canvas.width = innerWidth; canvas.height = innerHeight; }
-    addEventListener("resize", redimensionner); redimensionner();
-
-    function confettis(){
-      if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      const couleurs = ["#A98B45","#F6EDD5","#C9AC66","#2E6B4F"];
-      for(let i=0; i<150; i++){
-        particules.push({
-          x:Math.random()*canvas.width, y:-10 - Math.random()*80,
-          t:Math.random()*6+3, v:Math.random()*3+2, r:Math.random()*360,
-          a:1, c:couleurs[i % couleurs.length]
-        });
+    /*****************
+     *  TOOLBAR BTN  *
+     *****************/
+    $("reset").addEventListener("click", ()=>{
+      if(confirm("Réinitialiser tes réponses ?")){
+        state.opened = {};
+        state.score = 0;
+        save(); renderGrid();
       }
-      requestAnimationFrame(animer);
+    });
+    $("toggle-dev").addEventListener("click", ()=>{
+      state.dev = !state.dev;
+      save(); renderGrid();
+      $("toggle-dev").textContent = state.dev ? "Mode test (ON)" : "Mode test";
+    });
+
+    /****************
+     *  CONFETTIS   *
+     ****************/
+    const confettiCanvas = $("confetti");
+    const ctx = confettiCanvas.getContext('2d');
+    let particles = [];
+    function resize(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize); resize();
+
+    function celebrate(){
+      for(let i=0;i<160;i++){
+        particles.push({x:Math.random()*confettiCanvas.width, y:-10, s:Math.random()*6+2, v:Math.random()*3+2, r:Math.random()*360, a:1});
+      }
+      requestAnimationFrame(tick);
+      setTimeout(()=>{ particles=[]; ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); }, 1500);
     }
-    function animer(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      particules.forEach(p => {
-        p.y += p.v; p.r += 5; p.a -= 0.008;
+    function tick(){
+      ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+      particles.forEach(p=>{
+        p.y += p.v; p.r += 6; p.a -= 0.01;
         ctx.save();
         ctx.translate(p.x,p.y); ctx.rotate(p.r*Math.PI/180);
-        ctx.globalAlpha = Math.max(p.a,0);
-        ctx.fillStyle = p.c;
-        ctx.fillRect(-p.t/2,-p.t/2,p.t,p.t*0.6);
+        ctx.globalAlpha = Math.max(p.a, 0);
+        const c = Math.floor(p.r)%3;
+        ctx.fillStyle = c===0? '#A98B45' : (c===1? '#F6EDD5' : '#C9AC66');
+        ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);
         ctx.restore();
       });
-      particules = particules.filter(p => p.a > 0);
-      if(particules.length) requestAnimationFrame(animer);
-      else ctx.clearRect(0,0,canvas.width,canvas.height);
+      if(particles.some(p=>p.a>0)) requestAnimationFrame(tick);
     }
 
-    /*****************************************************************
-     * 8. DÉMARRAGE
-     *  → Mode test : ajoute ?mode=test à la fin de l’adresse
-     *    (toutes les cases s’ouvrent + bouton Réinitialiser)
-     *****************************************************************/
-    charger();
-    etat.test = new URLSearchParams(location.search).get("mode") === "test";
-    if(etat.test) $("barreTest").classList.add("visible");
+    /********
+     * INIT *
+     ********/
+    (function init(){
+      load();
+      const pad = n=> String(n).padStart(2,'0');
+      const now = new Date();
+      const fmt = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
+      $("today-pill").textContent = `Aujourd’hui : ${fmt}`;
 
-    $("btnReset").addEventListener("click", () => {
-      if(confirm("Effacer toutes tes réponses ?")){
-        etat.ouverts = {}; sauver(); afficherGrille();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('mode') === 'test') {
+          state.dev = true;
+          save();
+          $('toggle-dev').textContent = 'Mode test (ON)';
+      } else {
+          state.dev = false;
+          $('toggle-dev').style.display = 'none';
+          $('reset').style.display = 'none';
       }
-    });
-
-    afficherGrille();
+      renderGrid();
+    })();
   </script>
 </body>
 </html>
