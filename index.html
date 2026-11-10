@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calendrier de l’Avent Cambon Partners</title>
+
+  <!-- Police script pour le sous-titre -->
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Palette & tokens */
+      --bg:#F5ECE2;          /* Fond beige principal */
+      --card:#F5ECE2;        /* Fond clair des cartes et du modal */
+      --ink:#2b1f1f;         /* Texte principal */
+      --muted:#7f8aa3;       /* Texte secondaire */
+      --accent:#e0b567;      /* Doré (confettis/détails) */
+      --accent-2:#2d8a6a;    /* Vert succès */
+      --danger:#b51212;      /* Rouge erreur */
+      --red:#BE1917;         /* Rouge élégant */
+      --shadow:0 8px 18px rgba(0,0,0,.10); /* Ombre douce */
+    }
+
+    html, body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:"Times New Roman", serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    *{ box-sizing:border-box; }
+
+    .wrap{
+      max-width:1100px;
+      margin:64px auto 0;
+      padding:0 20px;
+    }
+
+    /* Header */
+    .title{
+      text-align:center;
+      font-size:54px;
+      font-weight:500;
+      color:var(--red);
+      line-height:1.25;
+    }
+    .subtitle{
+      text-align:center;
+      font-family:"Parisienne", cursive;
+      font-size:40px;
+      color:var(--red);
+      margin-top:6px;
+    }
+
+    /* Toolbar */
+    .toolbar{
+      display:flex;
+      gap:12px;
+      justify-content:flex-end;
+      max-width:1100px;
+      margin:28px auto 24px;
+      padding:0 20px;
+    }
+    .pill{
+      background:rgba(255,255,255,.4);
+      border:1px solid rgba(0,0,0,.08);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      color:#6c6a6a;
+    }
+    .btn{
+      background:#000;
+      color:#fff;
+      border-radius:6px;
+      border:none;
+      padding:8px 14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:background .2s ease;
+    }
+    .btn:hover{ transform:translateY(-1px); }
+
+    /* Grille */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(6, minmax(120px, 1fr));
+      gap:18px;
+      margin-top:28px;
+    }
+ 
+
+    .door{
+      position:relative;
+      background:var(--card);
+      border:none;
+      height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:200;
+      font-size:48px;
+      letter-spacing:.5px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:all .2s ease-in-out;
+      color:var(--red);
+      cursor:pointer;
+      font-family:"Times New Roman";
+    }
+    .door:hover:not(.opened){
+      box-shadow:0 10px 18px rgba(0,0,0,.12);
+      transform:translateY(-2px);
+    }
+    .door.locked{
+      cursor:not-allowed;
+      filter:none;
+      opacity:1;
+    }
+    .door.opened{
+      background:#F5ECE2;
+      box-shadow:none;
+      border:none;
+    }
+    .door .num{
+      position:absolute;
+      top:8px; left:10px;
+      color:var(--red);
+      font-size:32px;
+      font-weight:500;
+      z-index:2;
+    }
+    .door.opened .num{ color:#D9A0A0; }
+    .door .icon{
+      position:absolute;
+      bottom:8px;
+      right:8px;
+      width:50px;
+      height:50px;
+      object-fit:contain;
+      opacity:0.6;
+      transition:opacity .2s ease;
+    }
+    .door:hover:not(.opened) .icon{ opacity:0.8; }
+    .door.opened .icon{ opacity:0.25; }
+
+    
+    /* Modal */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background:none;
+      backdrop-filter:blur(6px);
+      display:none;
+      align-items:flex-start; justify-content:center;
+      padding-top:12vh; z-index:50;
+    }
+    .modal{
+      width:min(760px, calc(100vw - 32px));
+      background:#F4ECE3;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+      overflow:hidden;
+      color:var(--ink);
+      transform:translateY(0);
+      transition:transform .25s ease;
+      font-family:"Times New Roman", serif;
+    }
+    .modal.shake{ animation:shake .3s ease; }
+    @keyframes shake{
+      0%{transform:translateX(0)} 20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)} 60%{transform:translateX(-5px)}
+      80%{transform:translateX(5px)} 100%{transform:translateX(0)}
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:20px 33px;
+    }
+    .modal-title{
+      font-size:64px; font-weight:500; color:var(--red);
+      letter-spacing:.5px;
+    }
+    .modal-close{
+      background:transparent; border:none; font-size:24px; color:#846;
+      cursor:pointer;
+    }
+    .modal-body{ padding:10px 33px 20px; }
+
+    .anecdote{
+      background:none;
+      border:none;
+      padding:8px 0 12px;
+      font-size:18px;
+      line-height:1.6;
+      color:#BE1917;
+    }
+
+    .form{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:18px;
+    }
+    .hint{
+      font-family:"Parisienne";
+      font-size:20px;
+      color:#2b1f1f;
+      margin-bottom:4px;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+  
+
+    select{
+      flex:1;
+      padding:8px 10px;
+      border-radius:6px;
+      border:1px solid rgba(0,0,0,.2);
+      background:#F4ECE3;
+      color:#2b1f1f;
+      font-family:"Times New Roman", serif;
+      font-size:15px;
+      outline:none;
+    }
+
+    .result{ margin-top:10px; font-weight:700; }
+    .ok{ color:var(--accent-2); }
+    .ko{ color:var(--danger); }
+
+    .media{
+      display:none; margin-top:14px;
+    }
+    .media iframe, .media video{
+      width:100%; 
+      height:380px;
+      border:0; 
+      border-radius:12px;
+      background:#000;
+      animation:popIn .6s ease;
+    }
+    .media video{
+      object-fit:contain;
+    }
+    @keyframes popIn{
+      from{ opacity:0; transform:scale(.95); }
+      to{ opacity:1; transform:scale(1); }
+    }
+
+    .footer{ margin-top:12px; display:flex; justify-content:flex-end; }
+
+    /* Petit style pour le message gagnant */
+    .win-msg{ margin-top:8px; }
+    .watch-tip{ margin-top:4px; font-style:italic; opacity:.85; }
+
+    /* Confettis */
+    .confetti{ position:fixed; pointer-events:none; inset:0; overflow:hidden; z-index:60; }
+
+    /* RESPONSIVE - TABLETTE */
+    @media (max-width: 1024px) {
+      .wrap{
+        max-width: 100%;
+        margin: 40px auto 0;
+        padding: 0 16px;
+      }
+
+      .title{
+        font-size: 42px;
+      }
+
+      .subtitle{
+        font-size: 32px;
+      }
+
+      .toolbar{
+        margin: 20px auto 20px;
+        padding: 0 16px;
+      }
+
+      .grid{
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .door{
+        height: 110px;
+      }
+
+      .door .num{
+        font-size: 28px;
+        top: 6px;
+        left: 8px;
+      }
+
+      .door .icon{
+        width: 45px;
+        height: 45px;
+      }
+
+      .modal{
+        width: min(680px, calc(100vw - 32px));
+      }
+
+      .modal-head{
+        padding: 18px 28px;
+      }
+
+      .modal-title{
+        font-size: 56px;
+      }
+
+      .modal-body{
+        padding: 8px 28px 18px;
+      }
+
+      .anecdote{
+        font-size: 17px;
+      }
+
+      .media iframe, .media video{
+        height: 320px;
+      }
+    }
+
+    /* RESPONSIVE - MOBILE */
+    @media (max-width: 768px) {
+      .wrap{
+        margin: 24px auto 0;
+        padding: 0 12px;
+      }
+
+      .title{
+        font-size: 32px;
+      }
+
+      .subtitle{
+        font-size: 24px;
+        margin-top: 4px;
+      }
+
+      .toolbar{
+        flex-direction: column;
+        gap: 8px;
+        margin: 16px auto 16px;
+        padding: 0 12px;
+        align-items: stretch;
+      }
+
+      .pill, .btn{
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .grid{
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .door{
+        height: 100px;
+        font-size: 40px;
+      }
+
+      .door .num{
+        font-size: 24px;
+        top: 4px;
+        left: 6px;
+      }
+
+      .door .icon{
+        width: 38px;
+        height: 38px;
+        bottom: 6px;
+        right: 6px;
+      }
+
+      .modal-backdrop{
+        padding-top: 5vh;
+        align-items: flex-start;
+      }
+
+      .modal{
+        width: calc(100vw - 24px);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-head{
+        padding: 16px 20px;
+      }
+
+      .modal-title{
+        font-size: 48px;
+      }
+
+      .modal-close{
+        font-size: 28px;
+      }
+
+      .modal-body{
+        padding: 6px 20px 16px;
+      }
+
+      .anecdote{
+        font-size: 16px;
+        padding: 6px 0 10px;
+      }
+
+      .form{
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .hint{
+        font-size: 18px;
+      }
+
+      .row{
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      select, .btn{
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 16px;
+      }
+
+      .result{
+        margin-top: 8px;
+        font-size: 15px;
+      }
+
+      .media{
+        margin-top: 12px;
+      }
+
+      .media iframe, .media video{
+        height: 300px;
+      }
+    }
+
+    /* RESPONSIVE - TRÈS PETITS MOBILES */
+    @media (max-width: 480px) {
+      .title{
+        font-size: 26px;
+      }
+
+      .subtitle{
+        font-size: 20px;
+      }
+
+      .grid{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .door{
+        height: 90px;
+      }
+
+      .door .num{
+        font-size: 20px;
+      }
+
+      .door .icon{
+        width: 32px;
+        height: 32px;
+      }
+
+      .modal-title{
+        font-size: 40px;
+      }
+
+      .anecdote{
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="title">Le Calendrier de l’Avent Cambon Partners</div>
+    <div class="subtitle">À qui appartient le FunFact du jour ?</div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="toolbar">
+    <span class="pill" id="today-pill"></span>
+    <button class="btn" id="toggle-dev">Mode test</button>
+    <button class="btn" id="reset">Réinitialiser</button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modalBox">
+      <div class="modal-head">
+        <div class="modal-title" id="modal-title">01</div>
+        <button class="modal-close" id="close">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="anecdote" id="anecdote"></div>
+
+        <div class="form">
+          <label class="hint">À qui appartient ce FunFact ?</label>
+          <div class="row">
+            <select id="answerSelect"></select>
+            <button class="btn" id="submit">Valider</button>
+          </div>
+
+          <div class="result" id="result"></div>
+
+          <!-- Zone média (vidéo YouTube/Drive ou MP4) -->
+          <div class="media" id="media"></div>
+        </div>
+
+        <div class="footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <canvas class="confetti" id="confetti"></canvas>
+
+  <script>
+    /***************
+     * CONFIG TEAM *
+     ***************/
+    const TEAM = [
+     "Adèle","Alain","Alexandra","Alexandre A.","Alexandre C.","Alexandre H.","Amélie","Anna","Annabelle","Anselme","Aubert",
+     "Baptiste","Briac","Camille","Carine","Chadi","David","Elena","Florian","Gaiané","Gabriel","Grégoire","Guillaume E.",
+     "Guillaume T.","Jeremy","Jonathan","Jordan","Julien","Juliette","Laurent A.","Laurent N.", "Lily","Louis","Luca","Marius","Mathieu","Maxime",
+     "Maxime P.","Michael","Min","Morgann","Mostapha","Nathalie","Nicolas O.","Nicolas P.","Nicolas R.","Nicolas SP.","Paul","Pauline",
+     "Pierre","Raphaël","Robin","Romain D","Romain P.","Simon","Télio","Thomas A.","Thomas B.","Thomas K.","Victor","Yahia","Younes","Yvette"
+    ];
+
+    /********************
+     * 24 JOURS (démo)  *
+     ********************/
+  
+    const DAY_IMAGES = {
+      1: "img-calendrier 2/etoile-2.png",
+      2: "img-calendrier 2/houx.png",
+      3: "img-calendrier 2/etoile-1.png",
+      4: "img-calendrier 2/cloche.png",
+      5: "img-calendrier 2/boule.png",
+      6: "img-calendrier 2/cloche.png",
+      7: "img-calendrier 2/etoile-1.png",
+      8: "img-calendrier 2/ours.png",
+      9: "img-calendrier 2/houx.png",
+      10: "img-calendrier 2/cloche.png",
+      11: "img-calendrier 2/houx.png",
+      12: "img-calendrier 2/sucre.png",
+      13: "img-calendrier 2/sucre.png",
+      14: "img-calendrier 2/etoile-1.png",
+      15: "img-calendrier 2/sapin-traits.png",
+      16: "img-calendrier 2/etoile-2.png",
+      17: "img-calendrier 2/cadeau.png",
+      18: "img-calendrier 2/bougies.png",
+      19: "img-calendrier 2/cloche.png",
+      20: "img-calendrier 2/sapin-courbe.png",
+      21: "img-calendrier 2/cadeau.png",
+      22: "img-calendrier 2/etoile-1.png",
+      23: "img-calendrier 2/bougies.png",
+      24: "img-calendrier 2/houx.png"
+    };
+
+    const DAYS = [
+      {
+        day: 1,
+        anecdote: "J'ai failli me faire kidnapper au Mexique",
+        answer: "Mostapha",
+        video: "Vidéos calendrier de l_avent/jour-1.mp4"
+      },
+
+            {
+        day: 2,
+        anecdote: "Enfant, j'ai volé dans le jet privé de Johnny Hallyday",
+        answer: "Thomas K.",
+        video: "Vidéos calendrier de l_avent/jour-2.mp4"
+      },
+
+            {
+        day: 3,
+        anecdote: "J'ai déjeuné avec Bernard Tapie dans son célèbre hôtel particulier de la rue des Saint-Pères",
+        answer: "Laurent A.",
+        video: "Vidéos calendrier de l_avent/jour-3.mp4"
+      },
+      {
+        day: 4,
+        anecdote: "Enfant on m'appelait Harry Potter car j'ai une cicatrice sur le front",
+        answer: "Camille",
+        video: "Vidéos calendrier de l_avent/jour-4.mp4"
+      },
+
+      {
+        day: 5,
+        anecdote: "Quand j'étais jeune, j'ai été DJ sur Radio FG",
+        answer: "Nicolas SP.",
+        video: "Vidéos calendrier de l_avent/jour-5.mp4"
+      },
+            {
+        day: 6,
+        anecdote: "Enfant, pour éviter un contrôle de latin, j'ai simulé un mal de ventre et on m'a opéré de l'appendicite",
+        answer: "Maxime P.",
+        video: "Vidéos calendrier de l_avent/jour-6.mp4"
+      },
+      {
+        day: 7,
+        anecdote: "J'ai eu un accident de voiture avec l'auto-école en m'arrêtant brusquement au feu orange",
+        answer: "Anna",
+        video: "Vidéos calendrier de l_avent/jour-7.mp4"
+      },
+            {
+        day: 8,
+        anecdote: "L'aérospatial et l'aviation me passionnent",
+        answer: "Anselme",
+        video: "Vidéos calendrier de l_avent/jour-8.mp4"
+      },
+      {
+        day: 9,
+        anecdote: "Le chocolat noir me fait éternuer... Je fais partie des rares personnes dans le monde à ne pas aimer le chocolat !",
+        answer: "Télio",
+        video: "Vidéos calendrier de l_avent/jour-9.mp4"
+      },
+
+      {
+        day: 10,
+        anecdote: "J'ai perdu 1/4 d'un doigt dans une porte, il ne me reste que 9.75 doigts",
+        answer: "Lily",
+        video: "Vidéos calendrier de l_avent/jour-10.mp4"
+      },
+      {
+        day: 11,
+        anecdote: "Ma caméra de visio s'est branchée alors que j'étais sous la douche",
+        answer: "Michael",
+        video: "Vidéos calendrier de l_avent/jour-11.mp4"
+      },
+
+      {
+        day: 12,
+        anecdote: "J'ai participé à une coupe du monde junior de foot en Afrique du Sud en 2010",
+        answer: "Mathieu",
+        video: "Vidéos calendrier de l_avent/jour-12.mp4"
+      },
+            {
+        day: 13,
+        anecdote: "J'ai regardé Friends 16 fois, soit l'équivalent de 58 jours de ma vie... et je rigole toujours aux mêmes blagues !",
+        answer: "Nathalie",
+        video: "Vidéos calendrier de l_avent/jour-13.mp4"
+      },
+      {
+        day: 14,
+        anecdote: "Je fais partie des 0,001 % des auditeurs de Drake sur Spotify",
+        answer: "Grégoire",
+        video: "Vidéos calendrier de l_avent/jour-14.mp4"
+      },
+      {
+        day: 15,
+        anecdote: "J'ai fait huit ans de flûte traversière",
+        answer: "Briac",
+        video: "Vidéos calendrier de l_avent/jour-15.mp4"
+      },
+      {
+        day: 16,
+        anecdote: "J'ai vécu un gros tremblement de terre, pendant mon voyage de noces",
+        answer: "Victor",
+        video: "Vidéos calendrier de l_avent/jour-16.mp4"
+      },
+      {
+        day: 17,
+        anecdote: "J’ai acheté la voiture de mes rêves au pays-bas… elle est tombée en panne le jour même. Je l’ai réparée seul au bord de l’autoroute",
+        answer: "Marius",
+        video: "Vidéos calendrier de l_avent/jour-17.mp4"
+      },
+
+      {
+        day: 18,
+        anecdote: "J'ai mis le feu à la cuisine d'une amie en faisant des Arancini",
+        answer: "Nicolas R.",
+        video: "Vidéos calendrier de l_avent/jour-18.mp4"
+      },
+      {
+        day: 19,
+        anecdote: "Je me suis retrouvé à l'urinoir à coté de Di Caprio en boite à LA en 2006",
+        answer: "Nicolas P.",
+        video: "Vidéos calendrier de l_avent/jour-19.mp4"
+      },
+      {
+        day: 20,
+        anecdote: "Je me suis retrouvée dans un ascenceur avec Rihanna",
+        answer: "Amélie",
+        video: "Vidéos calendrier de l_avent/jour-20.mp4"
+      },
+      {
+        day: 21,
+        anecdote: "J'ai déjà nagé avec 10 bullsharks à Miami",
+        answer: "Romain P.",
+        video: "Vidéos calendrier de l_avent/jour-21.mp4" // exemple Drive
+      },
+      {
+        day: 22,
+        anecdote: "Enfant, j’ai été renversé par un dromadaire qui s’était échappé de son enclos au cirque",
+        answer: "Annabelle",
+        video: "Vidéos calendrier de l_avent/jour-22.mp4" // exemple Drive
+      },
+      {
+        day: 23,
+        anecdote: "J’ai fait ma demande en mariage devant le château de Disneyland Paris",
+        answer: "Jordan",
+        video: "Vidéos calendrier de l_avent/jour-23.mp4" // exemple Drive
+      },
+      {
+        day: 24,
+        anecdote: "J'ai oublié mon passeport avant de partir en séminaire Cambon et fait l'aller-retour chez moi avec un taxi en mode fast & furious",
+        answer: "Pauline",
+        video: "Vidéos calendrier de l_avent/jour-24.mp4" // exemple Drive
+      },
+
+    ];
+
+    /**********************
+     * ÉTAT & PERSISTENCE *
+     **********************/
+    const STORAGE_KEY = "advent-quiz-v1";
+    const state = { dev:false, score:0, opened:{} };
+
+    function load(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw) Object.assign(state, JSON.parse(raw));
+      }catch(_){}
+    }
+    function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+    /**************
+     * UTILITAIRE *
+     **************/
+    const today = new Date();
+    const month = today.getMonth()+1;
+    const date = today.getDate();
+    function isUnlocked(day){ return state.dev || (month===12 && day<=date); }
+    function $(id){ return document.getElementById(id); }
+    function el(tag, attrs={}, children=[]){
+      const node = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v])=>{
+        if(k==="class") node.className=v;
+        else if(k==="text") node.textContent=v;
+        else node.setAttribute(k,v);
+      });
+      [].concat(children).forEach(c=> node.appendChild(typeof c==="string" ? document.createTextNode(c) : c));
+      return node;
+    }
+    function norm(s){ return (s||"").toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase(); }
+    function check(day, guess){
+      const d = DAYS.find(x=>x.day===day);
+      const target = norm(d.answer);
+      const aliases = (d.aliases||[]).map(norm);
+      const g = norm(guess);
+      return g===target || aliases.includes(g);
+    }
+
+    /************
+     *  RENDER  *
+     ************/
+    const grid = $("grid");
+
+    function renderGrid(){
+      grid.innerHTML = "";
+      // Ordre aléatoire à l’affichage
+      const order = [...DAYS].sort(()=> Math.random() - 0.5);
+
+      order.forEach(d=>{
+        const opened = !!state.opened[d.day];
+        const door = el("button", {
+          class:`door ${!isUnlocked(d.day)?'locked':''} ${opened?'opened':''}`,
+          "data-day":d.day
+        });
+        door.appendChild(el("span", {class:"badge", text: ""}));
+        const dayLabel = String(d.day).padStart(2,'0');
+        door.appendChild(el("div", {class:"num", text:dayLabel}));
+        
+        const img = el("img", {class:"icon", src: DAY_IMAGES[d.day] || "", alt:""});
+        door.appendChild(img);
+        
+        door.addEventListener("click", ()=>{ if(!isUnlocked(d.day)) return; openModal(d.day); });
+        grid.appendChild(door);
+      });
+    }
+
+    /************
+     *  MODAL   *
+     ************/
+    const backdrop = $("backdrop"),
+          modalBox = $("modalBox"),
+          modalTitle = $("modal-title"),
+          anecdote = $("anecdote"),
+          answerSelect = $("answerSelect"),
+          submitBtn = $("submit"),
+          result = $("result"),
+          mediaBox = $("media");
+
+    let currentDay = 1;
+
+    function buildOptions(){
+      answerSelect.innerHTML = "";
+      answerSelect.appendChild(el("option",{value:"", text:"— Sélectionne un nom —"}));
+      TEAM.forEach(name => answerSelect.appendChild(el("option",{value:name, text:name})));
+    }
+
+    function openModal(day){
+      currentDay = day;
+      const d = DAYS.find(x=>x.day===day);
+      modalTitle.textContent = String(day).padStart(2,'0');
+      anecdote.textContent = d.anecdote;
+      buildOptions();
+
+      const saved = state.opened[day] || {};
+      answerSelect.value = saved.answer || "";
+      result.textContent = "";
+      result.className = "result";
+      mediaBox.style.display = "none";
+      mediaBox.innerHTML = "";
+
+      backdrop.style.display = "flex";
+    }
+    function closeModal(){ backdrop.style.display = "none"; }
+    $("close").addEventListener("click", closeModal);
+    backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeModal(); });
+
+    submitBtn.addEventListener("click", ()=>{
+      const guess = answerSelect.value;
+      if(!guess){
+        result.textContent = "Choisis un nom avant de valider";
+        result.className = "result ko";
+        return;
+      }
+
+      const good = check(currentDay, guess);
+      state.opened[currentDay] = { answer: guess, correct: good };
+
+      if (good) {
+        const d = DAYS.find(x => x.day === currentDay);
+
+        // Nouveau message incitatif (plus de "Réponse : ...")
+        result.className = "result ok";
+        result.innerHTML = `
+          <div class="win-msg">
+            <strong>Bien joué&nbsp;! 🎉</strong> C’était <strong>${d.answer}</strong>.
+            <div class="watch-tip">🎬 Regarde la vidéo ci-dessous pour découvrir son FunFact&nbsp;!</div>
+          </div>
+        `;
+
+        // Affichage de la vidéo si configurée
+        if (d.video) {
+          if (d.video.trim().toLowerCase().endsWith('.mp4')) {
+            // Encoder correctement l'URL pour gérer les espaces et caractères spéciaux
+            const encodedPath = d.video.split('/').map(part => encodeURIComponent(part)).join('/');
+            mediaBox.innerHTML = `<video controls playsinline src="${encodedPath}"></video>`;
+          } else {
+            mediaBox.innerHTML = `<iframe src="${d.video}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+          }
+          mediaBox.style.display = 'block';
+          mediaBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        celebrate();
+
+      } else {
+        result.className = "result ko";
+        result.textContent = "Loupé…! Essaie quelqu’un d’autre 😉";
+        modalBox.classList.add("shake");
+        setTimeout(()=> modalBox.classList.remove("shake"), 400);
+      }
+
+      state.score = Object.values(state.opened).filter(x=>x.correct).length;
+      save();
+      renderGrid();
+    });
+
+    /*****************
+     *  TOOLBAR BTN  *
+     *****************/
+    $("reset").addEventListener("click", ()=>{
+      if(confirm("Réinitialiser tes réponses ?")){
+        state.opened = {};
+        state.score = 0;
+        save(); renderGrid();
+      }
+    });
+    $("toggle-dev").addEventListener("click", ()=>{
+      state.dev = !state.dev;
+      save(); renderGrid();
+      $("toggle-dev").textContent = state.dev ? "Mode test (ON)" : "Mode test";
+    });
+
+    /****************
+     *  CONFETTIS   *
+     ****************/
+    const confettiCanvas = $("confetti");
+    const ctx = confettiCanvas.getContext('2d');
+    let particles = [];
+    function resize(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize); resize();
+
+    function celebrate(){
+      for(let i=0;i<160;i++){
+        particles.push({x:Math.random()*confettiCanvas.width, y:-10, s:Math.random()*6+2, v:Math.random()*3+2, r:Math.random()*360, a:1});
+      }
+      requestAnimationFrame(tick);
+      setTimeout(()=>{ particles=[]; ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); }, 1500);
+    }
+    function tick(){
+      ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+      particles.forEach(p=>{
+        p.y += p.v; p.r += 6; p.a -= 0.01;
+        ctx.save();
+        ctx.translate(p.x,p.y); ctx.rotate(p.r*Math.PI/180);
+        ctx.globalAlpha = Math.max(p.a, 0);
+        const c = Math.floor(p.r)%3;
+        ctx.fillStyle = c===0? '#e0b567' : (c===1? '#2d8a6a' : '#b51212');
+        ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);
+        ctx.restore();
+      });
+      if(particles.some(p=>p.a>0)) requestAnimationFrame(tick);
+    }
+
+    /********
+     * INIT *
+     ********/
+    (function init(){
+      load();
+      const pad = n=> String(n).padStart(2,'0');
+      const now = new Date();
+      const fmt = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
+      $("today-pill").textContent = `Aujourd’hui : ${fmt}`;
+      renderGrid();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('mode') === 'test') {
+          state.dev = true;
+          save();
+          $('toggle-dev').textContent = 'Mode test (ON)';
+  
+      } else {
+     
+          $('toggle-dev').style.display = 'none';
+          $('reset').style.display = 'none';
+      }
+    })();
+  </script>
+</body>
+</html>
