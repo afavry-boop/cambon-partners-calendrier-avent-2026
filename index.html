@@ -36,6 +36,7 @@
       position:relative;
       min-height:100vh;
       overflow-x:hidden;
+      display:flow-root; /* colle les décors tout en haut de la page */
     }
     *{ box-sizing:border-box; }
 
@@ -370,12 +371,8 @@
         height: 320px;
       }
 
-      /* Décors réduits */
-      .deco-sapin-hg, .deco-sapin-hd{ width:160px; }
-      .deco-boule{ width:150px; }
-      .deco-sapin-bd{ width:200px; }
-      .deco-pere-noel{ width:60px; }
-      .deco-bonhomme{ width:40px; }
+      /* Décors masqués sur tablette et mobile */
+      .deco{ display:none; }
     }
 
     /* RESPONSIVE - MOBILE */
