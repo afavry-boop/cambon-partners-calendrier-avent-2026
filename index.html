@@ -634,30 +634,200 @@
     const DAYS = [
       {
         day: 1,
-        jeu: "Qui est le bébé ?",
-        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
-        media: { type:"image", src:"jeux/jour-1-bebe.jpg" },
-        answer: "Annabelle",
+        jeu: "GeoGuessr",
+        anecdote: "Cette photo de vacances a été prise par un collègue. Où était-il ?",
+        media: { type:"image", src:"jeux/jour-1-geoguessr.jpg" },
+        choix: ["Lisbonne","Bali","Kyoto","Marrakech","Reykjavik"], // à adapter
+        answer: "", // à compléter
         video: ""
       },
       {
         day: 2,
-        jeu: "La chanson préférée",
-        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
-        media: { type:"audio", src:"jeux/jour-2-chanson.mp3" },
-        answer: "Anselme",
+        jeu: "Qui est le bébé ?",
+        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
+        media: { type:"image", src:"jeux/jour-2-bebe.jpg" },
+        answer: "", // à compléter
         video: ""
       },
       {
         day: 3,
+        jeu: "Le film préféré",
+        anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
+        media: { type:"image", src:"jeux/jour-3-film.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 4,
+        jeu: "Le talent caché",
+        anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
+        media: { type:"image", src:"jeux/jour-4-talent.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 5,
+        jeu: "La chanson préférée",
+        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        media: { type:"audio", src:"jeux/jour-5-chanson.mp3" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 6,
+        jeu: "Le look d’ado",
+        anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
+        media: { type:"image", src:"jeux/jour-6-ado.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 7,
         jeu: "GeoGuessr",
         anecdote: "Cette photo de vacances a été prise par un collègue. Où était-il ?",
-        media: { type:"image", src:"jeux/jour-3-vacances.jpg" },
-        choix: ["Lisbonne","Bali","Kyoto","Marrakech","Reykjavik"],
-        answer: "Kyoto",
+        media: { type:"image", src:"jeux/jour-7-geoguessr.jpg" },
+        choix: ["Lisbonne","Bali","Kyoto","Marrakech","Reykjavik"], // à adapter
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 8,
+        jeu: "Qui est le bébé ?",
+        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
+        media: { type:"image", src:"jeux/jour-8-bebe.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 9,
+        jeu: "Le talent caché",
+        anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
+        media: { type:"image", src:"jeux/jour-9-talent.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 10,
+        jeu: "Le film préféré",
+        anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
+        media: { type:"image", src:"jeux/jour-10-film.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 11,
+        jeu: "Le look d’ado",
+        anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
+        media: { type:"image", src:"jeux/jour-11-ado.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 12,
+        jeu: "La chanson préférée",
+        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        media: { type:"audio", src:"jeux/jour-12-chanson.mp3" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 13,
+        jeu: "GeoGuessr",
+        anecdote: "Cette photo de vacances a été prise par un collègue. Où était-il ?",
+        media: { type:"image", src:"jeux/jour-13-geoguessr.jpg" },
+        choix: ["Lisbonne","Bali","Kyoto","Marrakech","Reykjavik"], // à adapter
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 14,
+        jeu: "Qui est le bébé ?",
+        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
+        media: { type:"image", src:"jeux/jour-14-bebe.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 15,
+        jeu: "Le film préféré",
+        anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
+        media: { type:"image", src:"jeux/jour-15-film.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 16,
+        jeu: "Le talent caché",
+        anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
+        media: { type:"image", src:"jeux/jour-16-talent.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 17,
+        jeu: "Le look d’ado",
+        anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
+        media: { type:"image", src:"jeux/jour-17-ado.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 18,
+        jeu: "La chanson préférée",
+        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        media: { type:"audio", src:"jeux/jour-18-chanson.mp3" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 19,
+        jeu: "GeoGuessr",
+        anecdote: "Cette photo de vacances a été prise par un collègue. Où était-il ?",
+        media: { type:"image", src:"jeux/jour-19-geoguessr.jpg" },
+        choix: ["Lisbonne","Bali","Kyoto","Marrakech","Reykjavik"], // à adapter
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 20,
+        jeu: "Qui est le bébé ?",
+        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
+        media: { type:"image", src:"jeux/jour-20-bebe.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 21,
+        jeu: "Le talent caché",
+        anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
+        media: { type:"image", src:"jeux/jour-21-talent.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 22,
+        jeu: "Le film préféré",
+        anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
+        media: { type:"image", src:"jeux/jour-22-film.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 23,
+        jeu: "Le look d’ado",
+        anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
+        media: { type:"image", src:"jeux/jour-23-ado.jpg" },
+        answer: "", // à compléter
+        video: ""
+      },
+      {
+        day: 24,
+        jeu: "La chanson préférée",
+        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        media: { type:"audio", src:"jeux/jour-24-chanson.mp3" },
+        answer: "", // à compléter
         video: ""
       }
-      // Ajoute les jours suivants sur le même modèle…
     ];
 
     /**********************
