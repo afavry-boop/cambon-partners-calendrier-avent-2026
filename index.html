@@ -291,6 +291,65 @@
       outline:none;
     }
 
+    /* Liste des prénoms habillée aux couleurs du site (remplace la liste du navigateur) */
+    .picker{ position:relative; flex:1; width:100%; }
+    .picker-btn{
+      width:100%;
+      text-align:left;
+      padding:8px 34px 8px 12px;
+      border-radius:6px;
+      border:1px solid var(--card);
+      background:var(--bg);
+      color:var(--creme);
+      font-family:"Times New Roman", serif;
+      font-size:15px;
+      cursor:pointer;
+      position:relative;
+    }
+    .picker-btn::after{
+      content:"▾";
+      position:absolute; right:12px; top:50%;
+      transform:translateY(-50%);
+      color:var(--card);
+      transition:transform .2s ease;
+    }
+    .picker.open .picker-btn::after{ transform:translateY(-50%) rotate(180deg); }
+    .picker-list{
+      display:none;
+      position:absolute; left:0; right:0; top:calc(100% + 4px);
+      max-height:220px;
+      overflow-y:auto;
+      margin:0; padding:4px 0;
+      list-style:none;
+      background:var(--modal);
+      border:1px solid var(--card);
+      border-radius:6px;
+      box-shadow:0 8px 18px rgba(0,0,0,.4);
+      z-index:5;
+    }
+    .picker.open .picker-list{ display:block; }
+    .picker-list li{
+      padding:7px 12px;
+      cursor:pointer;
+      color:var(--creme);
+      font-size:15px;
+    }
+    .picker-list li.selected{ color:var(--accent); }
+    .picker-list li:hover{ background:#174A35; color:var(--creme); } /* survol vert sapin */
+
+    /* Barres de défilement fines et dorées (liste des prénoms + carte) */
+    .picker-list::-webkit-scrollbar, .modal::-webkit-scrollbar{ width:8px; }
+    .picker-list::-webkit-scrollbar-track, .modal::-webkit-scrollbar-track{ background:transparent; }
+    .picker-list::-webkit-scrollbar-thumb, .modal::-webkit-scrollbar-thumb{
+      background:var(--card);
+      border-radius:8px;
+      border:2px solid var(--modal);
+    }
+    .picker-list::-webkit-scrollbar-thumb:hover, .modal::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
+    @supports not selector(::-webkit-scrollbar){
+      .picker-list, .modal{ scrollbar-color:var(--card) transparent; scrollbar-width:thin; }
+    }
+
     .result{ margin-top:10px; font-weight:700; }
     .ok{ color:var(--accent-2); }
     .ko{ color:var(--danger); }
@@ -603,7 +662,11 @@
         <div class="form">
           <label class="hint">À ton avis, qui est-ce ?</label>
           <div class="row">
-            <select id="answerSelect"></select>
+            <div class="picker" id="picker">
+              <button type="button" class="picker-btn" id="pickerBtn">— Sélectionne une réponse —</button>
+              <ul class="picker-list" id="pickerList" role="listbox"></ul>
+            </div>
+            <select id="answerSelect" hidden></select>
             <button class="btn" id="submit">Valider</button>
           </div>
 
@@ -659,7 +722,7 @@
         day: 1,
         jeu: "La chanson préférée",
         indice: "", // phrase d'indice affichée en haut
-        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        anecdote: "C’est la chanson préférée de l'un.e d'entre nous. À qui est-elle ? ",
         media: { type:"image", src:"indice_jour-6.jpg" },
         answer: "David",
         video: "video/jour-6.mp4"
@@ -988,11 +1051,40 @@
 
     let currentDay = 1;
 
+    // Liste des prénoms habillée (nouveau)
+    const picker = $("picker"), pickerBtn = $("pickerBtn"), pickerList = $("pickerList");
+    function syncPicker(){
+      const val = answerSelect.value;
+      pickerBtn.textContent = val || "— Sélectionne une réponse —";
+      [...pickerList.children].forEach(li => li.classList.toggle("selected", li.dataset.value === val));
+    }
+    function buildPicker(liste){
+      pickerList.innerHTML = "";
+      liste.forEach(name => {
+        const li = el("li", {role:"option", text:name});
+        li.dataset.value = name;
+        li.addEventListener("click", () => {
+          answerSelect.value = name;
+          syncPicker();
+          picker.classList.remove("open");
+        });
+        pickerList.appendChild(li);
+      });
+    }
+    pickerBtn.addEventListener("click", () => {
+      picker.classList.toggle("open");
+      const sel = pickerList.querySelector(".selected");
+      if (sel) sel.scrollIntoView({block:"nearest"});
+    });
+    document.addEventListener("click", (e) => { if (!picker.contains(e.target)) picker.classList.remove("open"); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") picker.classList.remove("open"); });
+
     function buildOptions(d){
       answerSelect.innerHTML = "";
       answerSelect.appendChild(el("option",{value:"", text:"— Sélectionne une réponse —"}));
       const liste = d.choix || TEAM;
       liste.forEach(name => answerSelect.appendChild(el("option",{value:name, text:name})));
+      buildPicker(liste);
     }
 
     function openModal(day){
@@ -1010,6 +1102,7 @@
 
       const saved = state.opened[day] || {};
       answerSelect.value = saved.answer || "";
+      syncPicker();
       result.textContent = "";
       result.className = "result";
       mediaBox.style.display = "none";
@@ -1019,6 +1112,7 @@
     }
     function closeModal(){
       backdrop.style.display = "none";
+      picker.classList.remove("open");
       mediaJeu.innerHTML = "";   // coupe le son / la vidéo
       mediaBox.innerHTML = "";
     }
@@ -1049,6 +1143,9 @@
 
         // Affichage de la vidéo de révélation si configurée
         if (d.video) {
+          // L'image d'indice laisse place à la vidéo
+          mediaJeu.style.display = 'none';
+          mediaJeu.innerHTML = '';
           if (d.video.trim().toLowerCase().endsWith('.mp4')) {
             mediaBox.innerHTML = `<video controls playsinline src="${encodePath(d.video)}"></video>`;
           } else {
