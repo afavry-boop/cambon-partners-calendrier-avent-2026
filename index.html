@@ -198,7 +198,8 @@
       border:1px solid var(--card);
       border-radius:8px;
       box-shadow:0 4px 12px rgba(0,0,0,.35);
-      overflow:hidden;
+      max-height:calc(88vh - 24px); /* la carte ne dépasse jamais de l'écran */
+      overflow-y:auto;              /* … et défile quand le contenu est long */
       color:var(--ink);
       transform:translateY(0);
       transition:transform .25s ease;
@@ -233,27 +234,21 @@
     }
 
     /* Indice (remplace l'affichage du nom du jeu) */
-    .indice-label{
+    .indice{
       font-family:"Times New Roman", serif;
-      font-size:18px;
-      font-weight:600;
-      color:var(--creme);
-      margin-bottom:2px;
-    }
-    .indice-texte{
-      font-size:17px;
-      font-style:italic;
+      font-size:19px;
       line-height:1.5;
-      color:var(--muted);
-      margin-bottom:10px;
+      color:var(--creme);
+      margin:4px 0 6px;
     }
+
     /* Image / son d'indice : plus petit, sous la réponse */
     #mediaJeu{ margin-top:18px; }
     #mediaJeu img, #mediaJeu video{
       width:auto;
       max-width:100%;
       height:auto;
-      max-height:240px;
+      max-height:320px;
       background:none;
     }
 
@@ -393,6 +388,7 @@
       .anecdote{
         font-size: 21px;
       }
+      .indice{ font-size: 18px; }
 
       .media iframe, .media video, .media img{
         height: 320px;
@@ -487,6 +483,7 @@
         font-size: 20px;
         padding: 6px 0 10px;
       }
+      .indice{ font-size: 17px; }
 
       .form{
         gap: 8px;
@@ -563,6 +560,7 @@
       .anecdote{
         font-size: 18px;
       }
+      .indice{ font-size: 16px; }
     }
   </style>
 </head>
@@ -600,10 +598,7 @@
       <div class="modal-body">
         <div class="anecdote" id="anecdote"></div>
         <!-- Indice (à la place du nom du jeu) -->
-        <div id="indiceBox">
-          <div class="indice-label">Indice</div>
-          <div class="indice-texte" id="indice"></div>
-        </div>
+        <div class="indice" id="indiceBox">Indice : <span id="indice"></span></div>
 
         <div class="form">
           <label class="hint">À ton avis, qui est-ce ?</label>
@@ -663,8 +658,8 @@
       {
         day: 1,
         jeu: "GeoGuessr",
-        indice: "", // phrase d'indice affichée en haut
-        anecdote: "Qui est allé au Kenya ?", // lieu à adapter
+        indice: "Il est au bureau de Londres…", // phrase d'indice affichée en haut
+        anecdote: "Voici une photo de vacances de l'un.e d'entre nous. Qui est allé au Kenya ?", // lieu à adapter
         media: { type:"image", src:"jeux/jour-1-geoguessr.jpg" },
         answer: "Allone", // à compléter
         video: "video/jour-1.mp4",
@@ -1047,8 +1042,8 @@
         result.className = "result ok";
         result.innerHTML = `
           <div class="win-msg">
-            <strong>Bien joué&nbsp;! 🎉</strong> C’était <strong>${d.answer}</strong>.
-            ${d.video ? '<div class="watch-tip">🎬 Regarde la vidéo ci-dessous&nbsp;!</div>' : ''}
+            <strong>Bien joué&nbsp;! </strong> C’était <strong>${d.answer}</strong>.
+            ${d.video ? '<div class="watch-tip">Regarde la vidéo ci-dessous&nbsp;!</div>' : ''}
           </div>
         `;
 
@@ -1073,7 +1068,7 @@
 
       } else {
         result.className = "result ko";
-        result.textContent = "Loupé…! Essaie une autre réponse 😉";
+        result.textContent = "Loupé…! Essaie une autre réponse";
         modalBox.classList.add("shake");
         setTimeout(()=> modalBox.classList.remove("shake"), 400);
       }
