@@ -301,6 +301,8 @@
     /* Petit style pour le message gagnant */
     .win-msg{ margin-top:8px; }
     .watch-tip{ margin-top:4px; font-style:italic; opacity:.85; }
+    /* Anecdote affichée sous la vidéo de révélation (nouveau) */
+    .revelation{ margin-top:14px; font-size:18px; line-height:1.6; color:var(--creme); }
 
     /* Confettis */
     .confetti{ position:fixed; pointer-events:none; inset:0; overflow:hidden; z-index:60; }
@@ -601,7 +603,7 @@
     /***************
      * CONFIG TEAM *
      ***************/
-    const TEAM = ["Adel", "Alexandre A.", "Alexandre H.", "Allone", "Amélie", "Anna", "Arthur", "Aubert", "Balthazar", "Baptiste", "Briac", "Carine", "Chadi", "David", "Elena", "Eliott", "Florian", "Gabriel", "Grégoire", "Guillaume E.", "Guillaume T.", "Honorine", "Jérémie", "Jonathan", "Jordan", "Juliette", "Kieran", "Laurent A.", "Laurent N.", "Louis", "Luca", "Marius", "Mathieu", "Maxime P.", "Maxime W.", "Michael", "Morgann", "Mostapha", "Nathan", "Nicolas O.", "Nicolas P.", "Nicolas R.", "Nicolas S-P.", "Paul", "Pauline", "Pierre Bontemps", "Pierre Bouquet", "Pierre du Boucheron", "Robin", "Romain", "Simon", "Télio", "Theotime", "Thibault", "Thomas A.", "Thomas B.", "Tom", "Victor", "Yahia", "Yvette"];
+    const TEAM = ["Adel", "Alexandre A.", "Alexandre H.", "Allone", "Amélie", "Anna", "Arthur", "Aubert", "Balthazar", "Baptiste", "Briac", "Carine", "Chadi", "David", "Elena", "Eliott", "Florian", "Gabriel", "Grégoire", "Guillaume E.", "Guillaume T.", "Honorine", "Hugo", "Jérémie", "Jonathan", "Jordan", "Juliette", "Kieran", "Laurent A.", "Laurent N.", "Louis", "Luca", "Marius", "Mathieu", "Maxime P.", "Maxime W.", "Michael", "Morgann", "Mostapha", "Nathan", "Nicolas O.", "Nicolas P.", "Nicolas R.", "Nicolas S-P.", "Paul", "Pauline", "Pierre Bontemps", "Pierre Bouquet", "Pierre du Boucheron", "Robin", "Romain", "Shania", "Simon", "Télio", "Theotime", "Thibault", "Thomas A.", "Thomas B.", "Victor", "Yahia", "Yvette"];
 
     /*********************************************
      * ICÔNES DES CASES (comme l'an dernier)     *
@@ -632,34 +634,35 @@
       {
         day: 1,
         jeu: "GeoGuessr",
-        anecdote: "Qui est allé à Lisbonne ?", // lieu à adapter
+        anecdote: "Qui est allé au Kenya ?", // lieu à adapter
         media: { type:"image", src:"jeux/jour-1-geoguessr.jpg" },
-        answer: "", // à compléter
-        video: ""
+        answer: "Allone", // à compléter
+        video: "video/jour-1.mp4",
+        revelation: "Lors d’un décollage, j’ai glissé dans un avion qui n’avait pas de sièges, juste un plancher en bois, et dont la porte était grande ouverte. J’ai failli passer par-dessus bord mais heureusement, j’avais mon parachute sur le dos ! Neuf mois plus tard, j’ai appris dans la presse que la base de saut (qui était la seule restant dans la région) avait été fermée pour trafic de drogue et d’armes. Et là, j’ai repensé à la personne qui avait préparé mon parachute pour le saut... C’était donc au Kenya, à l’occasion d’un magnifique saut au coucher du soleil et au-dessus de la plage." // anecdote affichée sous la vidéo : écris-la entre les guillemets
       },
       {
         day: 2,
         jeu: "Qui est le bébé ?",
-        anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
+        anecdote: "Ce bébé est devenu l’un d'entre nous. Qui est-ce ?",
         media: { type:"image", src:"jeux/jour-2-bebe.jpg" },
-        answer: "", // à compléter
-        video: ""
+        answer: "Eliott", // à compléter
+        video: "video/jour-2.mp4"
       },
       {
         day: 3,
         jeu: "Le film préféré",
-        anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
+        anecdote: "C’est le film préféré de l’un.e d'entre nous. À qui est-il ?",
         media: { type:"image", src:"jeux/jour-3-film.jpg" },
-        answer: "", // à compléter
-        video: ""
+        answer: "Guillaume E", // à compléter
+        video: "video/jour-3.mp4"
       },
       {
         day: 4,
         jeu: "Le talent caché",
-        anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
+        anecdote: "L’un.ed'entre nous cache bien son jeu… À qui appartient ce talent caché ?",
         media: { type:"image", src:"jeux/jour-4-talent.jpg" },
-        answer: "", // à compléter
-        video: ""
+        answer: "Romain", // à compléter
+        video: "video/jour-4.mp4"
       },
       {
         day: 5,
@@ -667,7 +670,7 @@
         anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
         media: { type:"audio", src:"jeux/jour-5-chanson.mp3" },
         answer: "", // à compléter
-        video: ""
+        video: "video/jour-5.mp4"
       },
       {
         day: 6,
@@ -675,7 +678,7 @@
         anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
         media: { type:"image", src:"jeux/jour-6-ado.jpg" },
         answer: "", // à compléter
-        video: ""
+        video: "video/jour-6.mp4"
       },
       {
         day: 7,
@@ -683,7 +686,7 @@
         anecdote: "Qui est allé à Lisbonne ?", // lieu à adapter
         media: { type:"image", src:"jeux/jour-7-geoguessr.jpg" },
         answer: "", // à compléter
-        video: ""
+        video: "video/jour-7.mp4"
       },
       {
         day: 8,
@@ -998,6 +1001,12 @@
           }
           mediaBox.style.display = 'block';
           mediaBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Anecdote sous la vidéo, si renseignée (nouveau)
+        if (d.revelation) {
+          mediaBox.insertAdjacentHTML('beforeend', `<div class="revelation">${d.revelation}</div>`);
+          mediaBox.style.display = 'block';
         }
 
         celebrate();
