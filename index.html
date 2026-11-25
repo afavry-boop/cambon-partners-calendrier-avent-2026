@@ -232,11 +232,36 @@
       margin-bottom:4px;
     }
 
+    /* Indice (remplace l'affichage du nom du jeu) */
+    .indice-label{
+      font-family:"Times New Roman", serif;
+      font-size:18px;
+      font-weight:600;
+      color:var(--creme);
+      margin-bottom:2px;
+    }
+    .indice-texte{
+      font-size:17px;
+      font-style:italic;
+      line-height:1.5;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+    /* Image / son d'indice : plus petit, sous la réponse */
+    #mediaJeu{ margin-top:18px; }
+    #mediaJeu img, #mediaJeu video{
+      width:auto;
+      max-width:100%;
+      height:auto;
+      max-height:240px;
+      background:none;
+    }
+
     .anecdote{
       background:none;
       border:none;
       padding:8px 0 12px;
-      font-size:18px;
+      font-size:22px;
       line-height:1.6;
       color:var(--creme);
     }
@@ -366,7 +391,7 @@
       }
 
       .anecdote{
-        font-size: 17px;
+        font-size: 21px;
       }
 
       .media iframe, .media video, .media img{
@@ -459,7 +484,7 @@
       }
 
       .anecdote{
-        font-size: 16px;
+        font-size: 20px;
         padding: 6px 0 10px;
       }
 
@@ -536,7 +561,7 @@
       }
 
       .anecdote{
-        font-size: 15px;
+        font-size: 18px;
       }
     }
   </style>
@@ -573,14 +598,15 @@
       </div>
 
       <div class="modal-body">
-        <div class="jeu" id="jeu"></div>
         <div class="anecdote" id="anecdote"></div>
-
-        <!-- Média du mini-jeu, affiché AVANT de répondre (nouveau) -->
-        <div class="media" id="mediaJeu"></div>
+        <!-- Indice (à la place du nom du jeu) -->
+        <div id="indiceBox">
+          <div class="indice-label">Indice</div>
+          <div class="indice-texte" id="indice"></div>
+        </div>
 
         <div class="form">
-          <label class="hint">Ta réponse</label>
+          <label class="hint">À ton avis, qui est-ce ?</label>
           <div class="row">
             <select id="answerSelect"></select>
             <button class="btn" id="submit">Valider</button>
@@ -591,6 +617,9 @@
           <!-- Zone média de révélation, affichée APRÈS une bonne réponse -->
           <div class="media" id="media"></div>
         </div>
+
+        <!-- Image / son d'indice, sous la réponse -->
+        <div class="media" id="mediaJeu"></div>
 
         <div class="footer"></div>
       </div>
@@ -634,6 +663,7 @@
       {
         day: 1,
         jeu: "GeoGuessr",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Qui est allé au Kenya ?", // lieu à adapter
         media: { type:"image", src:"jeux/jour-1-geoguessr.jpg" },
         answer: "Allone", // à compléter
@@ -643,54 +673,63 @@
       {
         day: 2,
         jeu: "Qui est le bébé ?",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce bébé est devenu l’un d'entre nous. Qui est-ce ?",
         media: { type:"image", src:"jeux/jour-2-bebe.jpg" },
-        answer: "Eliott", // à compléter
+        answer: "Eliott",
         video: "video/jour-2.mp4"
       },
       {
         day: 3,
-        jeu: "Le film préféré",
-        anecdote: "C’est le film préféré de l’un.e d'entre nous. À qui est-il ?",
-        media: { type:"image", src:"jeux/jour-3-film.jpg" },
-        answer: "Guillaume E", // à compléter
-        video: "video/jour-3.mp4"
+        jeu: "Le talent caché",
+        indice: "", // phrase d'indice affichée en haut
+        anecdote: "L’un.e d'entre nous cache bien son jeu… À qui appartient ce talent caché ?",
+        media: { type:"image", src:"jeux/jour-3-talent.jpg" },
+        answer: "Balthazar",
+        video: "video/jour-3.mp4",
+        revelation: "J'ai un talent caché pour les tours de magie et j'ai encore quelques restes que je ressors en soirée" // anecdote affichée sous la vidéo : écris-la entre les guillemets
       },
       {
         day: 4,
-        jeu: "Le talent caché",
-        anecdote: "L’un.ed'entre nous cache bien son jeu… À qui appartient ce talent caché ?",
-        media: { type:"image", src:"jeux/jour-4-talent.jpg" },
-        answer: "Romain", // à compléter
+        jeu: "Le look d’ado",
+        indice: "", // phrase d'indice affichée en haut
+        anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
+        media: { type:"image", src:"jeux/jour-4-ado.jpg" },
+        answer: "Alexandre A.",
         video: "video/jour-4.mp4"
       },
       {
         day: 5,
-        jeu: "La chanson préférée",
-        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
-        media: { type:"audio", src:"jeux/jour-5-chanson.mp3" },
-        answer: "", // à compléter
+        jeu: "Le film préféré",
+        indice: "", // phrase d'indice affichée en haut
+        anecdote: "C’est le film préféré de l’un.e d'entre nous. À qui est-il ?",
+        media: { type:"image", src:"jeux/jour-5-film.jpg" },
+        answer: "Guillaume E.",
         video: "video/jour-5.mp4"
       },
       {
         day: 6,
-        jeu: "Le look d’ado",
-        anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
-        media: { type:"image", src:"jeux/jour-6-ado.jpg" },
-        answer: "", // à compléter
+        jeu: "La chanson préférée",
+        indice: "", // phrase d'indice affichée en haut
+        anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
+        media: { type:"audio", src:"jeux/jour-6-chanson.mp3" },
+        answer: "David",
         video: "video/jour-6.mp4"
       },
       {
         day: 7,
-        jeu: "GeoGuessr",
-        anecdote: "Qui est allé à Lisbonne ?", // lieu à adapter
-        media: { type:"image", src:"jeux/jour-7-geoguessr.jpg" },
-        answer: "", // à compléter
-        video: "video/jour-7.mp4"
+        jeu: "Le talent caché",
+        indice: "", // phrase d'indice affichée en haut
+        anecdote: "L’un.e d'entre nous cache bien son jeu… À qui appartient ce talent caché ?",
+        media: { type:"image", src:"jeux/jour-7-talent.jpg" },
+        answer: "Romain",
+        video: "video/jour-7.mp4",
+        revelation: "J'ai été très fort au diabolo !" // anecdote affichée sous la vidéo : écris-la entre les guillemets
       },
       {
         day: 8,
         jeu: "Qui est le bébé ?",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
         media: { type:"image", src:"jeux/jour-8-bebe.jpg" },
         answer: "", // à compléter
@@ -699,14 +738,17 @@
       {
         day: 9,
         jeu: "Le talent caché",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
         media: { type:"image", src:"jeux/jour-9-talent.jpg" },
         answer: "", // à compléter
-        video: ""
+        video: "",
+        revelation: "" // anecdote affichée sous la vidéo : écris-la entre les guillemets
       },
       {
         day: 10,
         jeu: "Le film préféré",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
         media: { type:"image", src:"jeux/jour-10-film.jpg" },
         answer: "", // à compléter
@@ -715,6 +757,7 @@
       {
         day: 11,
         jeu: "Le look d’ado",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
         media: { type:"image", src:"jeux/jour-11-ado.jpg" },
         answer: "", // à compléter
@@ -723,6 +766,7 @@
       {
         day: 12,
         jeu: "La chanson préférée",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
         media: { type:"audio", src:"jeux/jour-12-chanson.mp3" },
         answer: "", // à compléter
@@ -731,6 +775,7 @@
       {
         day: 13,
         jeu: "GeoGuessr",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Qui est allé à Lisbonne ?", // lieu à adapter
         media: { type:"image", src:"jeux/jour-13-geoguessr.jpg" },
         answer: "", // à compléter
@@ -739,6 +784,7 @@
       {
         day: 14,
         jeu: "Qui est le bébé ?",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
         media: { type:"image", src:"jeux/jour-14-bebe.jpg" },
         answer: "", // à compléter
@@ -747,6 +793,7 @@
       {
         day: 15,
         jeu: "Le film préféré",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
         media: { type:"image", src:"jeux/jour-15-film.jpg" },
         answer: "", // à compléter
@@ -755,14 +802,17 @@
       {
         day: 16,
         jeu: "Le talent caché",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
         media: { type:"image", src:"jeux/jour-16-talent.jpg" },
         answer: "", // à compléter
-        video: ""
+        video: "",
+        revelation: "" // anecdote affichée sous la vidéo : écris-la entre les guillemets
       },
       {
         day: 17,
         jeu: "Le look d’ado",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
         media: { type:"image", src:"jeux/jour-17-ado.jpg" },
         answer: "", // à compléter
@@ -771,6 +821,7 @@
       {
         day: 18,
         jeu: "La chanson préférée",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
         media: { type:"audio", src:"jeux/jour-18-chanson.mp3" },
         answer: "", // à compléter
@@ -779,6 +830,7 @@
       {
         day: 19,
         jeu: "GeoGuessr",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Qui est allé à Lisbonne ?", // lieu à adapter
         media: { type:"image", src:"jeux/jour-19-geoguessr.jpg" },
         answer: "", // à compléter
@@ -787,6 +839,7 @@
       {
         day: 20,
         jeu: "Qui est le bébé ?",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce bébé est devenu l’un de tes collègues. Sauras-tu le reconnaître ?",
         media: { type:"image", src:"jeux/jour-20-bebe.jpg" },
         answer: "", // à compléter
@@ -795,14 +848,17 @@
       {
         day: 21,
         jeu: "Le talent caché",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "L’un de tes collègues cache bien son jeu… À qui appartient ce talent ?",
         media: { type:"image", src:"jeux/jour-21-talent.jpg" },
         answer: "", // à compléter
-        video: ""
+        video: "",
+        revelation: "" // anecdote affichée sous la vidéo : écris-la entre les guillemets
       },
       {
         day: 22,
         jeu: "Le film préféré",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "C’est le film préféré de l’un de tes collègues. Sauras-tu deviner de qui ?",
         media: { type:"image", src:"jeux/jour-22-film.jpg" },
         answer: "", // à compléter
@@ -811,6 +867,7 @@
       {
         day: 23,
         jeu: "Le look d’ado",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Ce look d’ado appartient à l’un de tes collègues. Qui est-ce ?",
         media: { type:"image", src:"jeux/jour-23-ado.jpg" },
         answer: "", // à compléter
@@ -819,6 +876,7 @@
       {
         day: 24,
         jeu: "La chanson préférée",
+        indice: "", // phrase d'indice affichée en haut
         anecdote: "Écoute cet extrait : c’est la chanson préférée de quel collègue ?",
         media: { type:"audio", src:"jeux/jour-24-chanson.mp3" },
         answer: "", // à compléter
@@ -924,7 +982,8 @@
     const backdrop = $("backdrop"),
           modalBox = $("modalBox"),
           modalTitle = $("modal-title"),
-          jeu = $("jeu"),
+          indice = $("indice"),
+          indiceBox = $("indiceBox"),
           anecdote = $("anecdote"),
           mediaJeu = $("mediaJeu"),
           answerSelect = $("answerSelect"),
@@ -945,7 +1004,8 @@
       currentDay = day;
       const d = DAYS.find(x=>x.day===day);
       modalTitle.textContent = String(day).padStart(2,'0');
-      jeu.textContent = d.jeu || "";
+      indice.textContent = d.indice || "";
+      indiceBox.style.display = d.indice ? "block" : "none";
       anecdote.textContent = d.anecdote;
       buildOptions(d);
 
