@@ -1157,6 +1157,9 @@
           mediaJeu.innerHTML = '';
           if (d.video.trim().toLowerCase().endsWith('.mp4')) {
             mediaBox.innerHTML = `<video controls playsinline src="${encodePath(d.video)}"></video>`;
+            // Lance la vidéo automatiquement (avec le son)
+            const vid = mediaBox.querySelector('video');
+            vid.play().catch(() => { vid.muted = true; vid.play().catch(()=>{}); });
           } else {
             mediaBox.innerHTML = `<iframe src="${d.video}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
           }
