@@ -148,6 +148,14 @@
       cursor:pointer;
       font-family:"Times New Roman";
     }
+    /* Couleurs alternées des cases : --c = couleur de la case, --o = contour une fois ouverte */
+    .door:nth-child(4n+1){ --c:#A98B45; --o:#A98B45; } /* doré */
+    .door:nth-child(4n+2){ --c:#7A2832; --o:#B5434F; } /* bordeaux */
+    .door:nth-child(4n+3){ --c:#EFE3C4; --o:#EFE3C4; } /* crème */
+    .door:nth-child(4n+4){ --c:#1E5A41; --o:#4E9A6F; } /* vert */
+    .door:not(.opened){ background:var(--c); }
+    .door:nth-child(4n+3):not(.opened) .num{ color:var(--bg); }
+
     .door:hover:not(.opened){
       box-shadow:0 10px 18px rgba(0,0,0,.3);
       transform:translateY(-2px);
@@ -159,18 +167,18 @@
     }
     .door.opened{
       background:var(--bg);
-      box-shadow:inset 0 0 0 1px var(--card);
+      box-shadow:inset 0 0 0 2px var(--o, var(--card));
       border:none;
     }
     .door .num{
-      position:absolute;
-      top:8px; left:10px;
+      position:relative;
       color:var(--creme);
-      font-size:32px;
+      font-size:56px;
+      line-height:1;
       font-weight:500;
       z-index:2;
     }
-    .door.opened .num{ color:var(--card); }
+    .door.opened .num{ color:var(--o, var(--card)); }
     .door .icon{
       position:absolute;
       bottom:8px;
@@ -419,7 +427,7 @@
       }
 
       .door .num{
-        font-size: 28px;
+        font-size: 46px;
         top: 6px;
         left: 8px;
       }
@@ -500,7 +508,7 @@
       }
 
       .door .num{
-        font-size: 24px;
+        font-size: 40px;
         top: 4px;
         left: 6px;
       }
@@ -605,7 +613,7 @@
       }
 
       .door .num{
-        font-size: 20px;
+        font-size: 34px;
       }
 
       .door .icon{
@@ -723,7 +731,7 @@
         day: 1,
         jeu: "La chanson préférée",
         indice: "Le lundi, je suis en réunion, mais le samedi, j'ai d'autres compagnons à sabots. Qui suis-je ?", // phrase d'indice affichée en haut
-        anecdote: "C’est la chanson préférée de l'un.e d'entre nous. À qui est-elle ? ",
+        anecdote: "C’est la chanson préférée d’un membre de l’équipe. Saurez-vous deviner de qui ?",
         media: { type:"image", src:"indice_jour-6.jpg" },
         answer: "David",
         video: "video/jour-6.mp4"
@@ -732,7 +740,7 @@
         day: 2,
         jeu: "Qui est le bébé ?",
         indice: "Pour moi, un bon dossier commence toujours par une bonne adresse", // phrase d'indice affichée en haut
-        anecdote: "Ce bébé est devenu l’un d'entre nous. Qui est-ce ?",
+        anecdote: "Il a bien grandi depuis… et il travaille désormais parmi nous ! Qui se cache derrière ce bébé ?",
         media: { type:"image", src:"indice_jour-2.jpg" },
         answer: "Eliott",
         video: "video/jour-2.mp4"
@@ -741,7 +749,7 @@
         day: 3,
         jeu: "GeoGuessr",
         indice: "Je suis au bureau de Londres", // phrase d'indice affichée en haut
-        anecdote: "Voici une photo de vacances de l'un.e d'entre nous. Qui est allé au Kenya ?", // lieu à adapter
+        anecdote: "Un membre de l’équipe s’est envolé pour le Kenya. Qui est-ce ?", // lieu à adapter
         media: { type:"image", src:"indice_jour-1.jpg" },
         answer: "Allone", // à compléter
         video: "video/jour-1.mp4",
@@ -770,7 +778,7 @@
         day: 6,
         jeu: "Le film préféré",
         indice: "Je pourrais réciter la liste des courtiers de France les yeux fermés", // phrase d'indice affichée en haut
-        anecdote: "C’est le film préféré de l’un.e d'entre nous. À qui est-il ?",
+        anecdote: "C’est le film préféré d’un membre de l’équipe. Saurez-vous deviner de qui ?",
         media: { type:"image", src:"indice_jour 5.jpg" },
         answer: "Guillaume E.",
         video: "video/jour-5.mp4"
